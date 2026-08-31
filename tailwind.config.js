@@ -7,6 +7,19 @@ export default {
   ],
   theme: {
     colors: {
+      kash: {
+        bg: '#050506',
+        surface: '#0B0A0C',
+        card: '#131015',
+        wine: '#24131C',
+        burgundy: '#3A1724',
+        ivory: '#FFF8E7',
+        champagne: '#F5E6C8',
+        sand: '#D9C5A0',
+        violet: '#7C3AED',
+        cyan: '#06B6D4',
+        muted: '#8A7A6E',
+      },
       // Primary - Warm Gold/Saffron (Islamic Cultural)
       primary: {
         50: '#fffbf0',
@@ -86,6 +99,11 @@ export default {
       '2xl': '32px',
       '3xl': '48px',
       '4xl': '64px',
+    },
+    fontFamily: {
+      display: ['Cormorant Garamond', 'Playfair Display', 'serif'],
+      body: ['Inter', 'Geist', 'Manrope', 'sans-serif'],
+      arabic: ['IBM Plex Sans Arabic', 'Noto Kufi Arabic', 'sans-serif'],
     },
     borderRadius: {
       xs: '4px',
