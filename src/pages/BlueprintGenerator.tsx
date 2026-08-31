@@ -1,43 +1,35 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Download, Share2, Save, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import type { Blueprint, PersonalityTrait, QuizResponse } from '../types';
-import { Card, CardBody, Badge, Button } from '../components/ui';
+import { cn } from '../lib/utils';
 
 interface BlueprintGeneratorProps {
-  quizResponses: QuizResponse[];
+  quizResponses?: QuizResponse[];
   onSave?: (blueprint: Blueprint) => void;
 }
 
 export const BlueprintGenerator: React.FC<BlueprintGeneratorProps> = ({
-  quizResponses: _quizResponses,
+  quizResponses = [],
   onSave,
 }) => {
-  const [activeTab, setActiveTab] = useState<'traits' | 'recommendations' | 'insights'>('traits');
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState<'blueprint' | 'dossier' | 'recommendations' | 'insights'>('blueprint');
 
-  // حساب السمات بناءً على الإجابات
-  const traits = useMemo(() => generateTraits(_quizResponses), [_quizResponses]);
-
-  // توليد التوصيات
-  const recommendations = useMemo(
-    () => generateRecommendations(),
-    []
-  );
-
-  // رؤى ثقافية
-  const culturalInsights = useMemo(
-    () => generateCulturalInsights(),
-    []
-  );
+  const traits = useMemo(() => generateTraits(quizResponses), [quizResponses]);
+  const recommendations = useMemo(() => generateRecommendations(), []);
+  const culturalInsights = useMemo(() => generateCulturalInsights(), []);
 
   const blueprint: Blueprint = {
     id: `blueprint-${Date.now()}`,
     userId: 'temp-user',
-    name: `${traits[0]?.name || 'Personal'} Blueprint`,
-    description: `Your personalized blueprint based on your unique traits and values`,
+    name: 'Personal Beauty & Style Dossier',
+    description: 'Your tailored blueprint based on facial geometry, undertones, and cultural elegance',
     traits,
     avatar: {
       id: `avatar-${Date.now()}`,
-      baseColor: '#ffc933',
-      pattern: 'mandalas',
+      baseColor: '#380D12',
+      pattern: 'heritage',
       style: 'cultural',
     },
     recommendations,
@@ -47,211 +39,306 @@ export const BlueprintGenerator: React.FC<BlueprintGeneratorProps> = ({
   };
 
   return (
-    <div className="container-lg mx-auto py-2xl">
-      <div className="mb-2xl">
-        <h1 className="text-4xl font-bold mb-md">✨ خريطتك الشخصية / Your Blueprint</h1>
-        <p className="text-neutral-600">
-          اكتشف ملفك الشخصي الفريد والموارد المخصصة لتطويرك / Discover your unique profile and personalized resources
-        </p>
-      </div>
+    <div className="min-h-screen bg-[#0D0D0D] text-[#F7F1E8] font-sans antialiased overflow-x-hidden pb-20">
+      
+      {/* Top Floating Bar */}
+      <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-[#0D0D0D]/80 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+            <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+            <img src="/brand/kashkhati_logo.png" alt="KASHKHATI" className="h-4 w-auto object-contain brightness-125" />
+          </div>
 
-      {/* Tabs */}
-      <div className="flex gap-md mb-2xl border-b border-neutral-200">
-        <button
-          onClick={() => setActiveTab('traits')}
-          className={`px-lg py-md font-medium transition-colors ${
-            activeTab === 'traits'
-              ? 'text-primary-600 border-b-2 border-primary-600'
-              : 'text-neutral-600 hover:text-neutral-900'
-          }`}
-        >
-          السمات / Traits
-        </button>
-        <button
-          onClick={() => setActiveTab('recommendations')}
-          className={`px-lg py-md font-medium transition-colors ${
-            activeTab === 'recommendations'
-              ? 'text-primary-600 border-b-2 border-primary-600'
-              : 'text-neutral-600 hover:text-neutral-900'
-          }`}
-        >
-          التوصيات / Recommendations
-        </button>
-        <button
-          onClick={() => setActiveTab('insights')}
-          className={`px-lg py-md font-medium transition-colors ${
-            activeTab === 'insights'
-              ? 'text-primary-600 border-b-2 border-primary-600'
-              : 'text-neutral-600 hover:text-neutral-900'
-          }`}
-        >
-          رؤى ثقافية / Cultural Insights
-        </button>
-      </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => navigate('/library')}
+              className="px-4 py-2 rounded-full border border-white/15 text-xs text-[#F7F1E8] hover:bg-white/10 transition-colors"
+            >
+              Explore Library
+            </button>
+            <button 
+              onClick={() => onSave?.(blueprint)}
+              className="px-5 py-2 rounded-full bg-[#F7F1E8] text-[#0D0D0D] font-semibold text-xs hover:bg-white transition-colors flex items-center gap-2"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>Save Blueprint</span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-      {/* Content */}
-      <div className="space-y-2xl mb-2xl">
-        {activeTab === 'traits' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
-            {traits.map((trait) => (
-              <Card key={trait.id} hoverable>
-                <CardBody>
-                  <div className="flex-between mb-md">
-                    <h3 className="text-lg font-semibold">{trait.name}</h3>
-                    <Badge variant="primary">{trait.score}%</Badge>
+      {/* Main Dossier Content */}
+      <main className="max-w-6xl mx-auto px-6 pt-32">
+        
+        {/* Dossier Header Banner */}
+        <div className="text-center relative mb-12">
+          <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Bow" className="h-10 w-auto mx-auto mb-4 object-contain" />
+          
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#380D12] text-[10px] tracking-[0.25em] text-[#F7F1E8] border border-[#8B0E1A]/40 uppercase mb-4">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#D9C5A0]" />
+            <span>AUTHENTICATED BEAUTY BLUEPRINT</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl font-serif text-[#F7F1E8] leading-tight font-light">
+            Your Personal Beauty Dossier
+          </h1>
+          <p className="text-sm sm:text-base text-[#F7F1E8]/60 mt-3 max-w-xl mx-auto font-light">
+            An 8-dimensional analysis mapping facial proportions, skin undertones, hair texture, fragrance notes, and modest attire elegance.
+          </p>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="flex items-center justify-center gap-2 sm:gap-4 mb-12 border-b border-white/10 pb-4 overflow-x-auto">
+          {[
+            { id: 'blueprint', label: 'OVERVIEW' },
+            { id: 'dossier', label: 'AVATAR & REPORT' },
+            { id: 'recommendations', label: 'RECOMMENDATIONS' },
+            { id: 'insights', label: 'CULTURAL INSIGHTS' },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={cn(
+                "px-5 py-2.5 rounded-full text-xs font-semibold tracking-widest transition-all whitespace-nowrap",
+                activeTab === tab.id
+                  ? "bg-[#F7F1E8] text-[#0D0D0D] shadow-lg"
+                  : "text-[#F7F1E8]/60 hover:text-white hover:bg-white/5"
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab 1: Blueprint Overview */}
+        {activeTab === 'blueprint' && (
+          <div className="space-y-8">
+            {/* Visual Header Summary Card */}
+            <div className="grid lg:grid-cols-12 gap-8 items-center rounded-3xl bg-[#131015] border border-white/10 p-8 sm:p-12 relative overflow-hidden">
+              <div className="lg:col-span-7 space-y-6">
+                <span className="text-[10px] tracking-[0.25em] text-[#8B0E1A] uppercase font-semibold">YOUR UNIQUE HARMONY</span>
+                <h2 className="text-3xl font-serif text-[#F7F1E8]">Warm Autumn • Classic Modest</h2>
+                <p className="text-xs sm:text-sm text-[#F7F1E8]/70 leading-relaxed font-light">
+                  You possess rich golden undertones with soft facial contrast. Terracotta, deep maroon, and warm olive shades naturally complement your complexion and hair depth.
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4">
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-[10px] text-[#F7F1E8]/40 tracking-widest uppercase">UNDERTONE</div>
+                    <div className="text-xs font-semibold text-[#F7F1E8] mt-1">Warm Golden</div>
                   </div>
-                  <p className="text-neutral-600 text-sm mb-lg">
-                    {trait.description}
-                  </p>
-                  <div className="w-full bg-neutral-200 rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-primary-500 to-primary-600 h-2 rounded-full transition-all"
-                      style={{ width: `${trait.score}%` }}
-                    />
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-[10px] text-[#F7F1E8]/40 tracking-widest uppercase">FACE SHAPE</div>
+                    <div className="text-xs font-semibold text-[#F7F1E8] mt-1">Soft Oval</div>
                   </div>
-                  <div className="mt-md">
-                    <p className="text-xs text-neutral-500 font-medium mb-md">
-                      {trait.category}
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-[10px] text-[#F7F1E8]/40 tracking-widest uppercase">HAIR TYPE</div>
+                    <div className="text-xs font-semibold text-[#F7F1E8] mt-1">Curly / Textured</div>
+                  </div>
+                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-[10px] text-[#F7F1E8]/40 tracking-widest uppercase">STYLE</div>
+                    <div className="text-xs font-semibold text-[#F7F1E8] mt-1">Classic Hijab</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 relative flex justify-center">
+                <div className="relative w-full max-w-sm rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
+                  <img src="/brand/avatar_reference_1_curly_hair.png" alt="Avatar Preview" className="w-full h-80 object-cover object-top bg-[#F7F1E8]" />
+                  <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
+                    <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Trait Dimension Cards Grid */}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {traits.map((trait) => (
+                <div key={trait.id} className="p-6 rounded-3xl bg-[#131015] border border-white/10 space-y-4 hover:border-white/20 transition-all">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-base font-serif font-medium text-[#F7F1E8]">{trait.name}</h3>
+                    <span className="text-xs font-bold text-[#D9C5A0] px-3 py-1 rounded-full bg-white/5 border border-white/10">
+                      {trait.score}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#F7F1E8]/60 font-light leading-relaxed">{trait.description}</p>
+                  
+                  <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-gradient-to-r from-[#8B0E1A] to-[#D9C5A0] h-full rounded-full" style={{ width: `${trait.score}%` }} />
+                  </div>
+
+                  {trait.recommendations && (
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {trait.recommendations.map((rec, i) => (
+                        <span key={i} className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 text-[#F7F1E8]/70 border border-white/10">
+                          {rec}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 2: Full Avatar & Detailed Report */}
+        {activeTab === 'dossier' && (
+          <div className="space-y-8">
+            <div className="rounded-3xl bg-[#F7F1E8] text-[#0D0D0D] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+              <div className="flex items-center justify-between mb-8 pb-6 border-b border-[#0D0D0D]/10">
+                <div>
+                  <span className="text-[10px] tracking-[0.25em] text-[#380D12] uppercase font-bold">FULL DETAILS DOSSIER</span>
+                  <h2 className="text-3xl font-serif font-bold text-[#0D0D0D] mt-1">Report & Character Archetype</h2>
+                </div>
+                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal Stamp" className="w-12 h-12 object-contain" />
+              </div>
+
+              <div className="grid lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-6 rounded-2xl overflow-hidden border border-[#0D0D0D]/10 shadow-lg">
+                  <img src="/brand/avatar_reference_3_full_details_report.jpg" alt="Report Sheet" className="w-full h-auto object-cover" />
+                </div>
+
+                <div className="lg:col-span-6 space-y-6">
+                  <div className="space-y-2">
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#8B0E1A]">CHARACTER VIBE & STYLE</div>
+                    <h3 className="text-2xl font-serif text-[#0D0D0D]">Graceful, Modest & Timeless</h3>
+                    <p className="text-xs text-[#0D0D0D]/80 leading-relaxed font-light">
+                      Layered silk silhouettes, warm earth swatches, subtle rose blush, and structured blazers.
                     </p>
-                    {trait.recommendations && (
-                      <div className="flex flex-wrap gap-xs">
-                        {trait.recommendations.slice(0, 2).map((rec, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-xs">
-                            {rec}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
                   </div>
-                </CardBody>
-              </Card>
-            ))}
+
+                  <div className="space-y-3 pt-4 border-t border-[#0D0D0D]/10">
+                    <div className="flex items-center gap-3 text-xs text-[#0D0D0D]">
+                      <CheckCircle2 className="w-4 h-4 text-[#8B0E1A]" />
+                      <span>Custom color palette: Terracotta, Deep Burgundy, Warm Cream, Gold</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-[#0D0D0D]">
+                      <CheckCircle2 className="w-4 h-4 text-[#8B0E1A]" />
+                      <span>Hair & Hijab framing suited for soft oval facial proportions</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-[#0D0D0D]">
+                      <CheckCircle2 className="w-4 h-4 text-[#8B0E1A]" />
+                      <span>Fragrance pyramid: Oud, Musk, Bergamot, Warm Vanilla</span>
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => navigate('/library')}
+                    className="mt-6 px-8 py-3.5 rounded-full bg-[#380D12] text-[#F7F1E8] text-xs font-semibold tracking-wider hover:bg-[#8B0E1A] transition-colors"
+                  >
+                    EXPLORE MATCHING LIBRARY GUIDES
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
+        {/* Tab 3: Recommendations */}
         {activeTab === 'recommendations' && (
-          <div className="space-y-lg">
+          <div className="grid sm:grid-cols-2 gap-6">
             {recommendations.map((rec, idx) => (
-              <Card key={idx}>
-                <CardBody>
-                  <div className="flex gap-lg">
-                    <div className="text-3xl flex-shrink-0">
-                      {getRecommendationIcon(rec.category)}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold mb-md">{rec.title}</h3>
-                      <p className="text-neutral-600 mb-md">{rec.description}</p>
-                      <div className="flex flex-wrap gap-md">
-                        <Button variant="outline" className="flex-1">
-                          اقرأ المزيد / Learn More
-                        </Button>
-                        {rec.link && (
-                          <Button variant="primary" className="flex-1">
-                            ابدأ / Start
-                          </Button>
-                        )}
-                      </div>
-                    </div>
+              <div key={idx} className="p-8 rounded-3xl bg-[#131015] border border-white/10 space-y-4 hover:border-white/20 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-2xl">{rec.icon}</span>
+                    <span className="text-[10px] tracking-widest text-[#D9C5A0] uppercase font-semibold">{rec.category}</span>
                   </div>
-                </CardBody>
-              </Card>
+                  <h3 className="text-xl font-serif text-[#F7F1E8]">{rec.title}</h3>
+                  <p className="text-xs text-[#F7F1E8]/60 mt-2 leading-relaxed font-light">{rec.description}</p>
+                </div>
+
+                <button 
+                  onClick={() => navigate(rec.link)}
+                  className="mt-6 w-full py-3 rounded-full border border-white/15 text-xs text-[#F7F1E8] hover:bg-white hover:text-[#0D0D0D] transition-colors font-medium"
+                >
+                  EXPLORE RECOMMENDATION
+                </button>
+              </div>
             ))}
           </div>
         )}
 
+        {/* Tab 4: Cultural Insights */}
         {activeTab === 'insights' && (
-          <div className="space-y-lg">
+          <div className="space-y-6">
             {culturalInsights.map((insight) => (
-              <Card key={insight.id} className="border-l-4 border-primary-500">
-                <CardBody>
-                  <div className="flex-between mb-md">
-                    <h3 className="text-lg font-semibold">{insight.title}</h3>
-                    <Badge variant="primary">{insight.category}</Badge>
-                  </div>
-                  <p className="text-neutral-600 mb-lg leading-relaxed">
-                    {insight.content}
-                  </p>
-                  <div className="flex items-center gap-md text-sm text-neutral-500">
-                    <span>📚 {insight.source}</span>
-                    <span>🌐 {insight.language === 'ar' ? 'العربية' : 'English'}</span>
-                  </div>
-                </CardBody>
-              </Card>
+              <div key={insight.id} className="p-8 rounded-3xl bg-[#131015] border-l-4 border-l-[#8B0E1A] border-y border-r border-white/10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-serif text-[#F7F1E8]">{insight.title}</h3>
+                  <span className="text-[10px] px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#D9C5A0] uppercase tracking-widest">
+                    {insight.source}
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm text-[#F7F1E8]/70 leading-relaxed font-light">{insight.content}</p>
+              </div>
             ))}
           </div>
         )}
-      </div>
 
-      {/* Actions */}
-      <div className="flex gap-lg">
-        <Button
-          variant="primary"
-          onClick={() => onSave?.(blueprint)}
-          className="flex-1"
-        >
-          💾 حفظ الخريطة / Save Blueprint
-        </Button>
-        <Button variant="outline" className="flex-1">
-          🔗 مشاركة / Share
-        </Button>
-        <Button variant="outline" className="flex-1">
-          📥 تحميل PDF / Download
-        </Button>
-      </div>
+        {/* Action Bar Bottom */}
+        <div className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-4 border-t border-white/10 pt-8">
+          <button 
+            onClick={() => onSave?.(blueprint)}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#F7F1E8] text-[#0D0D0D] font-semibold text-xs tracking-wider hover:bg-white transition-all flex items-center justify-center gap-2"
+          >
+            <Save className="w-4 h-4" />
+            <span>SAVE BLUEPRINT TO PROFILE</span>
+          </button>
+
+          <button className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-white/15 text-[#F7F1E8] text-xs font-semibold tracking-wider hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+            <Share2 className="w-4 h-4" />
+            <span>SHARE DOSSIER</span>
+          </button>
+
+          <button className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-white/15 text-[#F7F1E8] text-xs font-semibold tracking-wider hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+            <Download className="w-4 h-4" />
+            <span>DOWNLOAD PDF DOSSIER</span>
+          </button>
+        </div>
+
+      </main>
+
     </div>
   );
 };
 
-// Helper functions
+// Helper Generators
 function generateTraits(_responses: QuizResponse[]): PersonalityTrait[] {
   return [
     {
       id: 'trait-1',
-      name: 'الإبداعية / Creativity',
-      description: 'قدرتك على توليد أفكار جديدة وحلول مبتكرة / Your ability to generate new ideas',
-      score: 85,
-      category: 'الشخصية / Personality',
-      recommendations: ['رسم', 'كتابة', 'تصميم'],
+      name: 'Facial Harmony & Proportions',
+      description: 'Soft oval geometry with gentle arch features and warm golden balance',
+      score: 88,
+      category: 'Facial Geometry',
+      recommendations: ['Contour jawline gently', 'Soft wing eyeliner'],
     },
     {
-      id: 'trait-2',
-      name: 'التعاطف / Empathy',
-      description: 'قدرتك على فهم مشاعر الآخرين والتعاطف معهم / Understanding others emotions',
-      score: 78,
-      category: 'الشخصية / Personality',
-      recommendations: ['التطوع', 'الاستشارة', 'القيادة'],
+      id: 'trait-[#2]',
+      name: 'Undertone & Color Spectrum',
+      description: 'Warm Autumn with golden olive hues complementing rich burgundy and saffron',
+      score: 92,
+      category: 'Color Analysis',
+      recommendations: ['Warm terracotta blush', 'Gold accents'],
     },
     {
       id: 'trait-3',
-      name: 'المرونة / Adaptability',
-      description: 'قدرتك على التكيف مع التغييرات والتحديات / Ability to adapt to changes',
-      score: 72,
-      category: 'القوة / Strength',
-      recommendations: ['تعلم جديد', 'تحديات', 'سفر'],
+      name: 'Hair Texture & Framing',
+      description: 'Defined natural curl volume suited for face-framing layers and breathable wrap',
+      score: 84,
+      category: 'Hair Care',
+      recommendations: ['Hydrating argan oil', 'Silk scarf lining'],
     },
     {
       id: 'trait-4',
-      name: 'القيادة / Leadership',
-      description: 'قدرتك على قيادة الفريق والتأثير على الآخرين / Ability to lead teams',
-      score: 68,
-      category: 'القوة / Strength',
-      recommendations: ['إدارة مشاريع', 'توجيه الفريق', 'التطوير'],
-    },
-    {
-      id: 'trait-5',
-      name: 'التركيز / Focus',
-      description: 'قدرتك على التركيز والانضباط في العمل / Ability to concentrate',
-      score: 82,
-      category: 'القوة / Strength',
-      recommendations: ['التأمل', 'تخطيط العمل', 'الأهداف'],
-    },
-    {
-      id: 'trait-6',
-      name: 'الاتصال / Communication',
-      description: 'قدرتك على التعبير الفعال والاستماع الجيد / Effective communication skills',
-      score: 75,
-      category: 'المهارة / Skill',
-      recommendations: ['التحدث أمام الجمهور', 'الكتابة', 'الاستماع'],
+      name: 'Fragrance Architecture',
+      description: 'Resinous base notes with Oud, Musk, and subtle Bergamot top notes',
+      score: 90,
+      category: 'Perfume Profile',
+      recommendations: ['Oud layering', 'Pulse point application'],
     },
   ];
 }
@@ -259,36 +346,32 @@ function generateTraits(_responses: QuizResponse[]): PersonalityTrait[] {
 function generateRecommendations() {
   return [
     {
-      title: 'استكشف مسارات التطوير / Explore Development Paths',
-      description:
-        'بناءً على سماتك، نوصي باستكشاف مجالات تتطلب الإبداعية والتعاطف',
-      category: 'تطوير / Development',
-      icon: '🎯',
-      link: '/development-paths',
+      title: 'Chapter I: The Guide to Makeup & Base Prep',
+      description: 'Master step-by-step foundation matching for warm golden undertones.',
+      category: 'Makeup Guide',
+      icon: '💄',
+      link: '/library',
     },
     {
-      title: 'تحسين مهارات التواصل / Improve Communication',
-      description:
-        'دورة تدريبية شاملة لتعزيز مهاراتك في الاتصال الفعال',
-      category: 'مهارات / Skills',
-      icon: '💬',
-      link: '/communication-course',
+      title: 'Chapter III: Modest Apparel & Structured Blazers',
+      description: 'Explore tailored trousers, silk scarves, and classic silhouette pairings.',
+      category: 'Style & Apparel',
+      icon: '👔',
+      link: '/library',
     },
     {
-      title: 'ممارسة التأمل واليقظة الذهنية / Mindfulness Practice',
-      description:
-        'برنامج شامل لتطوير التركيز والوعي الذاتي من خلال التأمل',
-      category: 'رفاهية / Wellbeing',
-      icon: '🧘',
-      link: '/mindfulness',
+      title: 'Chapter V: Traditional Perfume & Fragrance Layering',
+      description: 'Combine Bakhoor, Musk, and Rose oils for lasting warmth and projection.',
+      category: 'Perfume Guide',
+      icon: '✨',
+      link: '/library',
     },
     {
-      title: 'القيادة والإدارة / Leadership & Management',
-      description:
-        'برنامج متقدم لتطوير مهارات القيادة والإدارة الفعالة',
-      category: 'قيادة / Leadership',
-      icon: '👥',
-      link: '/leadership',
+      title: 'AI Studio Stylist & Wardrobe Generator',
+      description: 'Create personalized daily outfits mapped to your style blueprint.',
+      category: 'AI Studio',
+      icon: '👑',
+      link: '/studio',
     },
   ];
 }
@@ -297,40 +380,19 @@ function generateCulturalInsights() {
   return [
     {
       id: 'insight-1',
-      title: 'الإبداعية في التراث الإسلامي / Creativity in Islamic Heritage',
-      content:
-        'يُعتبر الإبداع قيمة أساسية في الثقافة الإسلامية. تشجع الآيات القرآنية على التفكير والابتكار في حل مشاكل المجتمع.',
+      title: 'Modesty as High Fashion Elegance',
+      content: 'True luxury lies in intentional tailoring, flowing fabrics, and harmonious color palettes that honor personal values without compromising sophistication.',
       category: 'wisdom' as const,
-      source: 'Islamic Philosophy',
-      language: 'ar' as const,
-    },
-    {
-      id: 'insight-2',
-      title: 'The Balance of Empathy and Justice',
-      content:
-        'في الإسلام، التعاطف يجب أن يكون مرفوقاً بالعدل. الرسول الكريم علم أصحابه أن الرحمة تجب معها الحكمة والعدل.',
-      category: 'value' as const,
-      source: 'Islamic Ethics',
+      source: 'KASHKHATI Philosophy',
       language: 'en' as const,
     },
     {
-      id: 'insight-3',
-      title: 'المرونة والصبر في الحياة',
-      content:
-        'تعاليم الإسلام تركز على المرونة والصبر في مواجهة التحديات. المرونة تساعدك على التكيف دون فقدان مبادئك.',
+      id: 'insight-2',
+      title: 'The Heritage of Botanical Perfumery & Bakhoor',
+      content: 'Fragrance in Eastern culture is an art form of hospitality and self-care. Layering natural oils with incense creates a signature scent projection.',
       category: 'practice' as const,
-      source: 'Quranic Teachings',
-      language: 'ar' as const,
+      source: 'Cultural Studies',
+      language: 'en' as const,
     },
   ];
-}
-
-function getRecommendationIcon(category: string): string {
-  const icons: Record<string, string> = {
-    'تطوير / Development': '📈',
-    'مهارات / Skills': '🎓',
-    'رفاهية / Wellbeing': '🌟',
-    'قيادة / Leadership': '👑',
-  };
-  return icons[category] || '💡';
 }

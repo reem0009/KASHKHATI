@@ -1,219 +1,273 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Clock, ArrowRight, Filter } from 'lucide-react';
 import type { LibraryContent } from '../types';
-import { Button, Card, CardBody, Badge, Input } from '../components/ui';
-import { CONTENT_CATEGORIES } from '../constants';
+import { cn } from '../lib/utils';
 
 const SAMPLE_LIBRARY: LibraryContent[] = [
   {
     id: '1',
-    title: 'حكمة الأجداد / Wisdom of Ancestors',
-    description: 'استكشف الحكمة التقليدية والقيم العريقة',
-    content: 'محتوى عميق حول الحكمة التقليدية...',
+    title: 'Chapter I: The Guide to Makeup & Base Prep',
+    description: 'Step-by-step foundation matching for warm, cool, and neutral undertones. Precision eyeliner techniques and skin prep.',
+    content: 'Full editorial guide covering prep & base, liquid liner wings, blush placement, and lip contouring...',
     category: 'wisdom',
-    subcategory: 'تقاليد / Traditions',
-    tags: ['heritage', 'wisdom', 'culture'],
-    language: 'ar',
-    author: 'محمد الحكيم / Mohammed Al-Hakim',
-    source: 'Traditional Knowledge',
-    readTime: 8,
+    subcategory: 'Makeup & Beauty',
+    tags: ['makeup', 'undertone', 'eyeliner', 'prep'],
+    language: 'en',
+    author: 'KASHKHATI Editorial',
+    source: 'Beauty Dossier Vol. I',
+    readTime: 12,
+    difficulty: 'beginner',
+    cultural_relevance: 98,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: '2',
+    title: 'Chapter II: Hairstyle & Clothing Silhouette Guide',
+    description: 'Face-framing cuts, refined bobs, tailored trousers, and structured blazers curated for classic modesty.',
+    content: 'Full guide covering haircut geometry, high-waisted trouser styling, and professional blazers...',
+    category: 'practices',
+    subcategory: 'Apparel & Hair',
+    tags: ['hairstyle', 'apparel', 'modest', 'blazer'],
+    language: 'en',
+    author: 'KASHKHATI Editorial',
+    source: 'Beauty Dossier Vol. II',
+    readTime: 10,
     difficulty: 'intermediate',
     cultural_relevance: 95,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: '2',
-    title: 'Modern Practices in Islamic Context',
-    description: 'Bridging traditional values with contemporary life',
-    content: 'Deep content about modern practices...',
-    category: 'practices',
-    subcategory: 'Daily Life',
-    tags: ['practices', 'modern', 'lifestyle'],
-    language: 'en',
-    author: 'Fatima Ahmed',
-    source: 'Contemporary Studies',
-    readTime: 10,
-    difficulty: 'beginner',
-    cultural_relevance: 85,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
     id: '3',
-    title: 'قيم العدالة والإنصاف / Values of Justice',
-    description: 'فهم أعمق لمبادئ العدالة في التراث الإسلامي',
-    content: 'محتوى شامل عن قيم العدالة...',
+    title: 'Chapter III: Fragrance Pyramid & Botanical Oils',
+    description: 'Understanding top, middle, and base notes. The heritage of layering Oud, Musk, Rose, and Bakhoor.',
+    content: 'Comprehensive fragrance guide on perfume application, pulse points, storage, and oil layering...',
     category: 'values',
-    subcategory: 'أخلاقيات / Ethics',
-    tags: ['justice', 'values', 'ethics'],
-    language: 'ar',
-    author: 'د. علي الدين / Dr. Ali Al-Din',
-    source: 'Islamic Philosophy',
-    readTime: 12,
+    subcategory: 'Fragrance & Scent',
+    tags: ['perfume', 'oud', 'musk', 'layering'],
+    language: 'en',
+    author: 'KASHKHATI Editorial',
+    source: 'Beauty Dossier Vol. III',
+    readTime: 15,
     difficulty: 'advanced',
-    cultural_relevance: 90,
+    cultural_relevance: 100,
     createdAt: new Date(),
     updatedAt: new Date(),
   },
 ];
 
 export const LibraryPage: React.FC = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedLanguage, setSelectedLanguage] = useState<'ar' | 'en' | null>(null);
-  const [selectedContent, setSelectedContent] = useState<LibraryContent | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedLanguage] = useState<string>('all');
 
-  const filteredContent = SAMPLE_LIBRARY.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = !selectedCategory || item.category === selectedCategory;
-    const matchesLanguage = !selectedLanguage || item.language === selectedLanguage;
+  const filteredContent = SAMPLE_LIBRARY.filter((item) => {
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    const matchesCategory =
+      selectedCategory === 'all' || item.category === selectedCategory;
+
+    const matchesLanguage =
+      selectedLanguage === 'all' || item.language === selectedLanguage;
+
     return matchesSearch && matchesCategory && matchesLanguage;
   });
 
   return (
-    <div className="container-lg mx-auto py-2xl">
-      <div className="mb-2xl">
-        <h1 className="text-4xl font-bold mb-md">📚 المكتبة / Library</h1>
-        <p className="text-neutral-600">استكشف كنزاً من المعرفة والحكمة الثقافية / Explore a treasury of cultural knowledge and wisdom</p>
-      </div>
+    <div className="min-h-screen bg-[#0D0D0D] text-[#F7F1E8] font-sans antialiased overflow-x-hidden pb-20">
+      
+      {/* Header Bar */}
+      <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-[#0D0D0D]/80 backdrop-blur-xl border border-white/10 shadow-2xl">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+            <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+            <img src="/brand/kashkhati_logo.png" alt="KASHKHATI" className="h-4 w-auto object-contain brightness-125" />
+          </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-2xl">
-        {/* Sidebar Filters */}
-        <div className="lg:col-span-1">
-          <Card className="sticky top-lg">
-            <CardBody>
-              <h3 className="text-lg font-semibold mb-lg">المرشحات / Filters</h3>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => navigate('/blueprint')}
+              className="px-4 py-2 rounded-full border border-white/15 text-xs text-[#F7F1E8] hover:bg-white/10 transition-colors"
+            >
+              My Blueprint
+            </button>
+            <button 
+              onClick={() => navigate('/quiz')}
+              className="px-5 py-2 rounded-full bg-[#F7F1E8] text-[#0D0D0D] font-semibold text-xs hover:bg-white transition-colors"
+            >
+              Take Assessment
+            </button>
+          </div>
+        </div>
+      </header>
 
-              {/* Search */}
-              <div className="mb-lg">
-                <Input
-                  placeholder="ابحث / Search..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+      {/* Main Container */}
+      <main className="max-w-7xl mx-auto px-6 lg:px-8 pt-32">
+        
+        {/* Banner Section */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Pearl Bow" className="h-10 w-auto mx-auto mb-4 object-contain" />
+          
+          <span className="px-4 py-1.5 rounded-full bg-[#380D12] text-[10px] tracking-[0.25em] text-[#F7F1E8] border border-[#8B0E1A]/40 uppercase font-semibold">
+            THE CULTURAL BEAUTY LIBRARY
+          </span>
+
+          <h1 className="text-4xl sm:text-6xl font-serif text-[#F7F1E8] font-light mt-4">
+            Curated Hardbound Guides
+          </h1>
+          <p className="text-sm sm:text-base text-[#F7F1E8]/60 mt-3 font-light leading-relaxed">
+            Explore 8 chapters of research-backed editorial guides covering makeup prep, hairstyle silhouettes, fragrance layering, and modest fashion.
+          </p>
+        </div>
+
+        {/* Hardbound Book Covers Showcase Carousel Grid */}
+        <div className="mb-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          {/* Book 1: Makeup */}
+          <div className="rounded-3xl bg-[#131015] border border-white/10 overflow-hidden group hover:border-[#8B0E1A]/50 transition-all duration-300">
+            <div className="relative h-72 overflow-hidden bg-[#F7F1E8]">
+              <img src="/brand/product_design1.png" alt="Makeup Guide" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
+                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
               </div>
+            </div>
+            <div className="p-6 space-y-3">
+              <span className="text-[10px] tracking-widest text-[#8B0E1A] uppercase font-bold">VOL I • MAKEUP & BASE</span>
+              <h3 className="text-xl font-serif text-[#F7F1E8]">The Guide to Makeup</h3>
+              <p className="text-xs text-[#F7F1E8]/60 font-light leading-relaxed">
+                Step-by-step foundation matching, liquid eyeliner precision, contouring, and lip color harmony.
+              </p>
+            </div>
+          </div>
 
-              {/* Language Filter */}
-              <div className="mb-lg">
-                <h4 className="text-sm font-semibold mb-md">اللغة / Language</h4>
-                <div className="space-y-sm">
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={selectedLanguage === 'ar'}
-                      onChange={() => setSelectedLanguage(selectedLanguage === 'ar' ? null : 'ar')}
-                      className="mr-md"
-                    />
-                    <span className="text-sm">العربية / Arabic</span>
-                  </label>
-                  <label className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={selectedLanguage === 'en'}
-                      onChange={() => setSelectedLanguage(selectedLanguage === 'en' ? null : 'en')}
-                      className="mr-md"
-                    />
-                    <span className="text-sm">English</span>
-                  </label>
+          {/* Book 2: Apparel & Hair */}
+          <div className="rounded-3xl bg-[#131015] border border-white/10 overflow-hidden group hover:border-[#8B0E1A]/50 transition-all duration-300">
+            <div className="relative h-72 overflow-hidden bg-[#F7F1E8]">
+              <img src="/brand/product_design2.png" alt="Apparel Guide" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
+                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+              </div>
+            </div>
+            <div className="p-6 space-y-3">
+              <span className="text-[10px] tracking-widest text-[#8B0E1A] uppercase font-bold">VOL II • APPAREL & HAIR</span>
+              <h3 className="text-xl font-serif text-[#F7F1E8]">Hairstyle & Clothing Guide</h3>
+              <p className="text-xs text-[#F7F1E8]/60 font-light leading-relaxed">
+                Refined bobs, high-waisted tapered trousers, structured blazers, and modest attire layering.
+              </p>
+            </div>
+          </div>
+
+          {/* Book 3: Fragrance */}
+          <div className="rounded-3xl bg-[#131015] border border-white/10 overflow-hidden group hover:border-[#8B0E1A]/50 transition-all duration-300">
+            <div className="relative h-72 overflow-hidden bg-[#F7F1E8]">
+              <img src="/brand/product_design3.png" alt="Perfume Guide" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
+                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+              </div>
+            </div>
+            <div className="p-6 space-y-3">
+              <span className="text-[10px] tracking-widest text-[#D9C5A0] uppercase font-bold">VOL III • PERFUME & SCENT</span>
+              <h3 className="text-xl font-serif text-[#F7F1E8]">Guide to Perfume & Notes</h3>
+              <p className="text-xs text-[#F7F1E8]/60 font-light leading-relaxed">
+                Fragrance pyramid, application pulse points, Bakhoor incense, and natural botanical oil layering.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Search & Filter Controls */}
+        <div className="mb-10 p-6 rounded-3xl bg-[#131015] border border-white/10 flex flex-col md:flex-row gap-4 items-center justify-between">
+          <div className="relative w-full md:w-96">
+            <Search className="w-4 h-4 text-[#F7F1E8]/40 absolute left-4 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              placeholder="Search chapters, topics, or tags..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 rounded-full bg-white/5 border border-white/10 text-xs text-[#F7F1E8] placeholder-[#F7F1E8]/40 focus:outline-none focus:border-[#8B0E1A]"
+            />
+          </div>
+
+          <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto">
+            <div className="flex items-center gap-2 text-xs text-[#F7F1E8]/60">
+              <Filter className="w-3.5 h-3.5" />
+              <span>CATEGORY:</span>
+            </div>
+            {['all', 'wisdom', 'practices', 'values'].map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={cn(
+                  "px-4 py-2 rounded-full text-xs font-medium tracking-wider capitalize transition-all",
+                  selectedCategory === cat
+                    ? "bg-[#F7F1E8] text-[#0D0D0D]"
+                    : "bg-white/5 border border-white/10 text-[#F7F1E8]/70 hover:bg-white/10"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Filtered Library Content Cards */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {filteredContent.map((item) => (
+            <div 
+              key={item.id} 
+              className="p-8 rounded-3xl bg-[#131015] border border-white/10 flex flex-col justify-between hover:border-white/20 transition-all group"
+            >
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-xs text-[#F7F1E8]/50">
+                  <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] tracking-widest text-[#D9C5A0] uppercase font-semibold">
+                    {item.subcategory}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3.5 h-3.5 text-[#8B0E1A]" />
+                    <span>{item.readTime} min read</span>
+                  </div>
                 </div>
-              </div>
 
-              {/* Category Filter */}
-              <div>
-                <h4 className="text-sm font-semibold mb-md">التصنيف / Category</h4>
-                <div className="space-y-sm">
-                  {Object.entries(CONTENT_CATEGORIES).map(([key, value]) => (
-                    <button
-                      key={key}
-                      onClick={() => setSelectedCategory(selectedCategory === value ? null : value)}
-                      className={`block w-full text-left text-sm px-md py-sm rounded-md transition-colors ${
-                        selectedCategory === value
-                          ? 'bg-primary-100 text-primary-900'
-                          : 'hover:bg-neutral-100 text-neutral-700'
-                      }`}
-                    >
-                      {key.charAt(0) + key.slice(1).toLowerCase()}
-                    </button>
+                <h3 className="text-xl font-serif text-[#F7F1E8] group-hover:text-[#D9C5A0] transition-colors">
+                  {item.title}
+                </h3>
+
+                <p className="text-xs text-[#F7F1E8]/60 font-light leading-relaxed">
+                  {item.description}
+                </p>
+
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {item.tags.map((tag) => (
+                    <span key={tag} className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 text-[#F7F1E8]/50 border border-white/5">
+                      #{tag}
+                    </span>
                   ))}
                 </div>
               </div>
-            </CardBody>
-          </Card>
-        </div>
 
-        {/* Main Content */}
-        <div className="lg:col-span-3">
-          {selectedContent ? (
-            // Detail View
-            <Card>
-              <CardBody>
-                <button
-                  onClick={() => setSelectedContent(null)}
-                  className="text-primary-600 hover:text-primary-700 mb-lg font-medium"
+              <div className="mt-8 pt-4 border-t border-white/5 flex items-center justify-between">
+                <span className="text-[11px] text-[#F7F1E8]/40">{item.author}</span>
+                <button 
+                  onClick={() => navigate('/blueprint')}
+                  className="text-xs font-semibold tracking-wider text-[#F7F1E8] hover:text-[#D9C5A0] transition-colors flex items-center gap-1"
                 >
-                  ← عودة / Back
+                  <span>READ CHAPTER</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
-                <h2 className="text-3xl font-bold mb-md">{selectedContent.title}</h2>
-                <div className="flex flex-wrap gap-md mb-lg">
-                  <Badge variant="primary">{selectedContent.category}</Badge>
-                  <Badge variant="secondary">{selectedContent.difficulty}</Badge>
-                   <Badge variant="primary">⏱ {selectedContent.readTime} min</Badge>
-                </div>
-                <p className="text-neutral-600 mb-lg">{selectedContent.author}</p>
-                <div className="prose max-w-none">
-                  <p>{selectedContent.content}</p>
-                </div>
-                <div className="mt-lg pt-lg border-t border-neutral-200">
-                  <Button variant="primary" className="w-full">
-                    ✓ تم القراءة / Mark as Read
-                  </Button>
-                </div>
-              </CardBody>
-            </Card>
-          ) : (
-            // Grid View
-            <div className="space-y-lg">
-              <div className="text-sm text-neutral-600">
-                {filteredContent.length} من {SAMPLE_LIBRARY.length} مقالة / articles found
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-lg">
-                {filteredContent.map((item) => (
-                  <Card
-                    key={item.id}
-                    hoverable
-                    className="cursor-pointer"
-                    onClick={() => setSelectedContent(item)}
-                  >
-                    <CardBody>
-                      <div className="flex items-start justify-between mb-md">
-                        <h3 className="text-lg font-semibold line-clamp-2">{item.title}</h3>
-                        <Badge variant="primary" className="ml-md flex-shrink-0">
-                          {item.cultural_relevance}%
-                        </Badge>
-                      </div>
-                      <p className="text-neutral-600 text-sm mb-md line-clamp-2">
-                        {item.description}
-                      </p>
-                      <div className="flex flex-wrap gap-xs mb-md">
-                        {item.tags.slice(0, 3).map((tag) => (
-                          <Badge key={tag} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                      </div>
-                      <div className="flex items-center justify-between text-xs text-neutral-500 pt-md border-t border-neutral-100">
-                        <span>📖 {item.readTime} min read</span>
-                        <span>{item.difficulty}</span>
-                      </div>
-                    </CardBody>
-                  </Card>
-                ))}
               </div>
             </div>
-          )}
+          ))}
         </div>
-      </div>
+
+      </main>
+
     </div>
   );
 };
