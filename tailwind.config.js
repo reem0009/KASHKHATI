@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         kash: {
-          bg: '#050506',
+          bg: '#000000',
           surface: '#0B0A0C',
           card: '#131015',
           wine: '#24131C',
