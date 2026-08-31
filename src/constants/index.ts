@@ -221,9 +221,9 @@ export const ANIMATION_DURATION = {
   EXTRA_SLOW: 500,
 } as const;
 
-// API Endpoints (to be configured)
+// API Endpoints - uses VITE_API_URL from Vercel env, falls back to localhost for dev
 export const API_ENDPOINTS = {
-  BASE_URL: 'http://localhost:3000/api',
+  BASE_URL: (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000/api',
   QUIZ: '/quiz',
   RESULTS: '/results',
   LIBRARY: '/library',
