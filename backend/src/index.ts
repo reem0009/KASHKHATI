@@ -43,25 +43,34 @@ app.use((req: Request, res: Response) => {
 // Initialize database and start server
 const startServer = async () => {
   try {
-    // Test database connection
-    await pool.query('SELECT NOW()');
-    console.log('✅ Database connected successfully');
+    // Test database connection (non-blocking on Vercel)
+    try {
+      await pool.query('SELECT NOW()');
+      console.log('✅ Database connected successfully');
+      await initializeDatabase();
+    } catch (dbError) {
+      console.warn('⚠️ Database not available (ok for serverless without DB env):', (dbError as Error).message);
+    }
 
-    // Initialize database schema
-    await initializeDatabase();
-
-    // Start server
-    app.listen(PORT, () => {
-      console.log(`🚀 KASHKHATI Backend running on http://localhost:${PORT}`);
-      console.log(`📚 API Documentation: http://localhost:${PORT}/api`);
-      console.log(`🔗 Frontend: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
-    });
+    // Only listen when not on Vercel serverless
+    if (!process.env.VERCEL) {
+      app.listen(PORT, () => {
+        console.log(`🚀 KASHKHATI Backend running on http://localhost:${PORT}`);
+        console.log(`📚 API Documentation: http://localhost:${PORT}/api`);
+        console.log(`🔗 Frontend: ${process.env.CORS_ORIGIN || 'http://localhost:5173'}`);
+      });
+    }
   } catch (error) {
     console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    if (!process.env.VERCEL) process.exit(1);
   }
 };
 
-startServer();
+// Auto-init for serverless (don't block export)
+if (process.env.VERCEL) {
+  pool.query('SELECT NOW()').then(() => initializeDatabase()).catch(() => {});
+} else {
+  startServer();
+}
 
 export default app;
