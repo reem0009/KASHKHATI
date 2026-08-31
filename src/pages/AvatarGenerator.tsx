@@ -28,7 +28,7 @@ export const AvatarGenerator: React.FC<AvatarGeneratorProps> = ({ onSave }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-[#F7F1E8] font-sans antialiased overflow-x-hidden pb-20">
+    <div className="min-h-screen bg-black text-[#F7F1E8] font-sans antialiased overflow-x-hidden pb-20">
       
       {/* Header Bar */}
       <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8">

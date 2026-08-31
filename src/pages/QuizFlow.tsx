@@ -79,10 +79,10 @@ export const QuizFlow: React.FC<QuizProps> = ({ onComplete }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] text-[#F7F1E8] font-sans flex flex-col justify-between relative overflow-hidden py-8 px-4 sm:px-8">
+    <div className="min-h-screen bg-black text-[#F7F1E8] font-sans flex flex-col justify-between relative overflow-hidden py-8 px-4 sm:px-8">
       
       {/* Background Glow */}
-      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#380D12] via-[#0D0D0D] to-[#0D0D0D]" />
+      <div className="fixed inset-0 pointer-events-none opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#380D12] via-black to-black" />
 
       {/* Header */}
       <header className="max-w-4xl mx-auto w-full flex items-center justify-between z-10">
