@@ -7,6 +7,7 @@ import { LibraryPage } from './pages/LibraryPage';
 import { BlueprintGenerator } from './pages/BlueprintGenerator';
 import { CulturalGuidelines } from './pages/CulturalGuidelines';
 import { MonetizationFlow } from './pages/MonetizationFlow';
+import { AnimeDemo } from './components/AnimeDemo';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/pricing" element={<MonetizationFlow />} />
+        <Route path="/anime-demo" element={<AnimeDemo />} />
 
         {/* Main App Routes with Layout */}
         <Route element={<MainLayout />}>
