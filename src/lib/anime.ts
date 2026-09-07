@@ -1,7 +1,7 @@
 import { animate, createTimeline, stagger, utils } from 'animejs';
 
 /**
- * KASHKHATI Anime.js Integration
+ * deheiyya Anime.js Integration
  * Anime.js v4 API utilities for luxury animations
  */
 
@@ -212,3 +212,4 @@ export const luxuryShimmer = (targets: any) => {
 
 // Export main functions
 export { animate, createTimeline, stagger, utils };
+

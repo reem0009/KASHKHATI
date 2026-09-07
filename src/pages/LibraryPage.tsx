@@ -14,7 +14,7 @@ const SAMPLE_LIBRARY: LibraryContent[] = [
     subcategory: 'Makeup & Beauty',
     tags: ['makeup', 'undertone', 'eyeliner', 'prep'],
     language: 'en',
-    author: 'KASHKHATI Editorial',
+    author: 'deheiyya Editorial',
     source: 'Beauty Dossier Vol. I',
     readTime: 12,
     difficulty: 'beginner',
@@ -31,7 +31,7 @@ const SAMPLE_LIBRARY: LibraryContent[] = [
     subcategory: 'Apparel & Hair',
     tags: ['hairstyle', 'apparel', 'modest', 'blazer'],
     language: 'en',
-    author: 'KASHKHATI Editorial',
+    author: 'deheiyya Editorial',
     source: 'Beauty Dossier Vol. II',
     readTime: 10,
     difficulty: 'intermediate',
@@ -48,7 +48,7 @@ const SAMPLE_LIBRARY: LibraryContent[] = [
     subcategory: 'Fragrance & Scent',
     tags: ['perfume', 'oud', 'musk', 'layering'],
     language: 'en',
-    author: 'KASHKHATI Editorial',
+    author: 'deheiyya Editorial',
     source: 'Beauty Dossier Vol. III',
     readTime: 15,
     difficulty: 'advanced',
@@ -86,8 +86,8 @@ export const LibraryPage: React.FC = () => {
       <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-[#0D0D0D]/80 backdrop-blur-xl border border-white/10 shadow-2xl">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
-            <img src="/brand/kashkhati_logo.png" alt="KASHKHATI" className="h-4 w-auto object-contain brightness-125" />
+            <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+            <img src="/brand/deheiyya_logo.png" alt="deheiyya" className="h-4 w-auto object-contain brightness-125" />
           </div>
 
           <div className="flex items-center gap-3">
@@ -112,7 +112,7 @@ export const LibraryPage: React.FC = () => {
         
         {/* Banner Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Pearl Bow" className="h-10 w-auto mx-auto mb-4 object-contain" />
+          <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Pearl Bow" className="h-10 w-auto mx-auto mb-4 object-contain" />
           
           <span className="px-4 py-1.5 rounded-full bg-[#380D12] text-[10px] tracking-[0.25em] text-[#F7F1E8] border border-[#8B0E1A]/40 uppercase font-semibold">
             THE CULTURAL BEAUTY LIBRARY
@@ -134,7 +134,7 @@ export const LibraryPage: React.FC = () => {
             <div className="relative h-72 overflow-hidden bg-[#F7F1E8]">
               <img src="/brand/product_design1.png" alt="Makeup Guide" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
-                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+                <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
               </div>
             </div>
             <div className="p-6 space-y-3">
@@ -151,7 +151,7 @@ export const LibraryPage: React.FC = () => {
             <div className="relative h-72 overflow-hidden bg-[#F7F1E8]">
               <img src="/brand/product_design2.png" alt="Apparel Guide" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
-                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+                <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
               </div>
             </div>
             <div className="p-6 space-y-3">
@@ -168,7 +168,7 @@ export const LibraryPage: React.FC = () => {
             <div className="relative h-72 overflow-hidden bg-[#F7F1E8]">
               <img src="/brand/product_design3.png" alt="Perfume Guide" className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105" />
               <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
-                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+                <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
               </div>
             </div>
             <div className="p-6 space-y-3">
@@ -271,3 +271,4 @@ export const LibraryPage: React.FC = () => {
     </div>
   );
 };
+

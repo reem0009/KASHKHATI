@@ -28,7 +28,7 @@ export const MonetizationFlow: React.FC<MonetizationFlowProps> = ({
       name: 'مجاني / Free',
       price: 0,
       currency: 'ر.س',
-      description: 'ابدأ رحلتك مع KASHKHATI',
+      description: 'ابدأ رحلتك مع deheiyya',
       features: [
         { feature: 'اختبار الشخصية الأساسي', included: true },
         { feature: 'أفاتار أساسي', included: true },
@@ -246,7 +246,7 @@ export const MonetizationFlow: React.FC<MonetizationFlowProps> = ({
               🚀 جاهز للترقية؟ / Ready to upgrade?
             </h2>
             <p className="text-neutral-700 mb-lg">
-              انضم إلى آلاف المستخدمين الذين طورو أنفسهم مع KASHKHATI البريميوم
+              انضم إلى آلاف المستخدمين الذين طورو أنفسهم مع deheiyya البريميوم
             </p>
             <div className="flex gap-lg">
               <Button
@@ -339,3 +339,4 @@ export const MonetizationFlow: React.FC<MonetizationFlowProps> = ({
     </div>
   );
 };
+

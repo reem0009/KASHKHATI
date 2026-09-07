@@ -3,7 +3,7 @@ import { fadeInUp, fadeInStagger, pearlShimmer, scaleIn, luxuryShimmer } from '.
 
 /**
  * Anime.js Demo Component
- * Showcases various animation utilities for KASHKHATI
+ * Showcases various animation utilities for deheiyya
  */
 export const AnimeDemo = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ export const AnimeDemo = () => {
         <div ref={heroRef} className="text-center mb-16 opacity-0">
           <img 
             ref={pearlRef}
-            src="/brand/kashkhati_motifs-pearl-bow.png" 
+            src="/brand/deheiyya_motifs-pearl-bow.png" 
             alt="Pearl Bow" 
             className="h-10 w-auto mx-auto mb-4 object-contain"
           />
@@ -113,3 +113,4 @@ export const AnimeDemo = () => {
     </div>
   );
 };
+

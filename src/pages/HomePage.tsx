@@ -55,14 +55,14 @@ export const HomePage = () => {
           {/* Logo Brand Emblem */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
             <img 
-              src="/brand/kashkhati_motifs-seal.png" 
-              alt="Kashkhati Wax Seal" 
+              src="/brand/deheiyya_motifs-seal.png" 
+              alt="deheiyya Wax Seal" 
               className="w-9 h-9 object-contain drop-shadow-[0_2px_10px_rgba(139,14,26,0.5)] transition-transform duration-300 hover:scale-105" 
             />
             <div className="flex flex-col">
               <img 
-                src="/brand/kashkhati_logo.png" 
-                alt="KASHKHATI" 
+                src="/brand/deheiyya_logo.png" 
+                alt="deheiyya" 
                 className="h-4 sm:h-5 w-auto object-contain brightness-125" 
               />
               <span className="text-[9px] tracking-[0.25em] text-[#F7F1E8]/50 uppercase font-light">كشختي • Cultural Beauty</span>
@@ -122,7 +122,7 @@ export const HomePage = () => {
               {/* Pearl Bow Emblem Divider */}
               <div className="flex items-center gap-3 mb-6">
                 <img 
-                  src="/brand/kashkhati_motifs-pearl-bow.png" 
+                  src="/brand/deheiyya_motifs-pearl-bow.png" 
                   alt="Pearl Bow Motif" 
                   className="h-7 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(247,241,232,0.3)] animate-pulse" 
                 />
@@ -190,8 +190,8 @@ export const HomePage = () => {
                 {/* Background Cultural Hero Showcase Image */}
                 <div className="relative w-full h-full rounded-[26px] overflow-hidden group">
                   <img 
-                    src="/brand/kashkhati_brand_in_action2.png" 
-                    alt="Kashkhati Cultural Diversity Showcase" 
+                    src="/brand/deheiyya_brand_in_action2.png" 
+                    alt="deheiyya Cultural Diversity Showcase" 
                     className="w-full h-full object-cover object-center transform transition-transform duration-1000 group-hover:scale-105"
                   />
                   
@@ -200,7 +200,7 @@ export const HomePage = () => {
                   
                   {/* Floating Wax Seal Stamp Emblem */}
                   <div className="absolute top-6 right-6 flex items-center gap-2 bg-[#0D0D0D]/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/15 shadow-xl">
-                    <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+                    <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
                     <span className="text-[10px] tracking-widest uppercase text-[#F7F1E8]">AUTHENTICATED DOSSIER</span>
                   </div>
 
@@ -223,7 +223,7 @@ export const HomePage = () => {
 
                 {/* Floating Pearl Bow Accent Top Left */}
                 <img 
-                  src="/brand/kashkhati_motifs-pearl-bow.png" 
+                  src="/brand/deheiyya_motifs-pearl-bow.png" 
                   alt="Pearl Bow" 
                   className="absolute -top-4 -left-4 w-16 h-16 object-contain drop-shadow-[0_4px_20px_rgba(247,241,232,0.4)] pointer-events-none"
                 />
@@ -239,7 +239,7 @@ export const HomePage = () => {
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           
           <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] tracking-[0.25em] text-[#F7F1E8]/70 uppercase mb-8">
-            <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-4 h-4 object-contain" />
+            <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-4 h-4 object-contain" />
             <span>{t('BRAND PHILOSOPHY', 'فلسفة كشختي')}</span>
           </div>
 
@@ -252,12 +252,12 @@ export const HomePage = () => {
 
           <p className="mt-6 text-base sm:text-lg text-[#F7F1E8]/70 max-w-2xl mx-auto font-light leading-relaxed">
             {t(
-              'KASHKHATI maps the intricate interplay between your facial features, skin undertones, lifestyle, modesty preferences, and heritage. A quiet luxury library created around who you truly are.',
+              'deheiyya maps the intricate interplay between your facial features, skin undertones, lifestyle, modesty preferences, and heritage. A quiet luxury library created around who you truly are.',
               'كشختي ترسم التناغم الدقيق بين ملامح وجهكِ، درجات بشرتكِ، نمط حياتكِ، وأصالة هويتكِ. مكتبة فخمة ومصممة بعناية حول جوهركِ الحقيقي.'
             )}
           </p>
 
-          {/* 5 Pillars of KASHKHATI */}
+          {/* 5 Pillars of deheiyya */}
           <div className="mt-14 grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
             {[
               { title: 'ELEGANT', sub: 'Luxury through restraint' },
@@ -281,7 +281,7 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="text-center mb-16">
-            <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Bow" className="h-8 w-auto mx-auto mb-4 object-contain" />
+            <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Bow" className="h-8 w-auto mx-auto mb-4 object-contain" />
             <h2 className="text-3xl sm:text-4xl font-serif font-light text-[#F7F1E8]">
               {t('How Your Journey Unfolds', 'كيف تسير رحلة استكشافكِ')}
             </h2>
@@ -393,7 +393,7 @@ export const HomePage = () => {
                   <span className="px-3 py-1 rounded-full bg-[#380D12] text-[#F7F1E8] text-[10px] tracking-widest">
                     PERSONAL REPORT
                   </span>
-                  <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+                  <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
                 </div>
                 <h3 className="text-2xl font-serif font-bold mt-4 text-[#0D0D0D]">
                   {t('Avatar & Style Report', 'تقرير الصورة الرمزية والأسلوب')}
@@ -465,7 +465,7 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-10 h-10 mx-auto mb-4 object-contain" />
+            <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-10 h-10 mx-auto mb-4 object-contain" />
             <h2 className="text-3xl sm:text-5xl font-serif font-light text-[#F7F1E8]">
               {t('Choose Your Path', 'اختاري مستوى رحلتكِ')}
             </h2>
@@ -567,7 +567,7 @@ export const HomePage = () => {
       {/* FINAL CALL TO ACTION */}
       <section className="py-28 bg-gradient-to-b from-[#0D0D0D] via-[#380D12]/40 to-[#0D0D0D] text-center relative overflow-hidden border-t border-white/10">
         <div className="max-w-4xl mx-auto px-6 relative z-10">
-          <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Pearl Bow" className="h-10 w-auto mx-auto mb-6 object-contain" />
+          <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Pearl Bow" className="h-10 w-auto mx-auto mb-6 object-contain" />
           
           <h2 className="text-3xl sm:text-6xl font-serif font-light text-[#F7F1E8] leading-tight">
             {t('Reveal the version of yourself', 'اكتشفي النسخة الأجمل من نفسكِ')}<br />
@@ -601,7 +601,7 @@ export const HomePage = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             
             <div className="flex flex-col items-center md:items-start gap-2">
-              <img src="/brand/kashkhati_logo.png" alt="Kashkhati" className="h-6 w-auto object-contain brightness-125" />
+              <img src="/brand/deheiyya_logo.png" alt="deheiyya" className="h-6 w-auto object-contain brightness-125" />
               <p className="text-xs text-[#F7F1E8]/50 font-light">
                 {t('Personalized Cultural Beauty Library', 'مكتبة الجمال الثقافية المخصصة')}
               </p>
@@ -614,7 +614,7 @@ export const HomePage = () => {
             </div>
 
             <div className="text-[11px] text-[#F7F1E8]/40">
-              © 2026 KASHKHATI • كشختي. All rights reserved.
+              © 2026 deheiyya • كشختي. All rights reserved.
             </div>
 
           </div>
@@ -624,3 +624,4 @@ export const HomePage = () => {
     </div>
   )
 }
+

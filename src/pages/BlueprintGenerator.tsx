@@ -45,8 +45,8 @@ export const BlueprintGenerator: React.FC<BlueprintGeneratorProps> = ({
       <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3 rounded-full bg-[#0D0D0D]/80 backdrop-blur-xl border border-white/10 shadow-2xl">
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
-            <img src="/brand/kashkhati_logo.png" alt="KASHKHATI" className="h-4 w-auto object-contain brightness-125" />
+            <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+            <img src="/brand/deheiyya_logo.png" alt="deheiyya" className="h-4 w-auto object-contain brightness-125" />
           </div>
 
           <div className="flex items-center gap-3">
@@ -72,7 +72,7 @@ export const BlueprintGenerator: React.FC<BlueprintGeneratorProps> = ({
         
         {/* Dossier Header Banner */}
         <div className="text-center relative mb-12">
-          <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Bow" className="h-10 w-auto mx-auto mb-4 object-contain" />
+          <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Bow" className="h-10 w-auto mx-auto mb-4 object-contain" />
           
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#380D12] text-[10px] tracking-[0.25em] text-[#F7F1E8] border border-[#8B0E1A]/40 uppercase mb-4">
             <ShieldCheck className="w-3.5 h-3.5 text-[#D9C5A0]" />
@@ -146,7 +146,7 @@ export const BlueprintGenerator: React.FC<BlueprintGeneratorProps> = ({
                 <div className="relative w-full max-w-sm rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
                   <img src="/brand/avatar_reference_1_curly_hair.png" alt="Avatar Preview" className="w-full h-80 object-cover object-top bg-[#F7F1E8]" />
                   <div className="absolute top-4 right-4 p-2 rounded-full bg-[#0D0D0D]/80 backdrop-blur-md border border-white/15">
-                    <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
+                    <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
                   </div>
                 </div>
               </div>
@@ -192,7 +192,7 @@ export const BlueprintGenerator: React.FC<BlueprintGeneratorProps> = ({
                   <span className="text-[10px] tracking-[0.25em] text-[#380D12] uppercase font-bold">FULL DETAILS DOSSIER</span>
                   <h2 className="text-3xl font-serif font-bold text-[#0D0D0D] mt-1">Report & Character Archetype</h2>
                 </div>
-                <img src="/brand/kashkhati_motifs-seal.png" alt="Seal Stamp" className="w-12 h-12 object-contain" />
+                <img src="/brand/deheiyya_motifs-seal.png" alt="Seal Stamp" className="w-12 h-12 object-contain" />
               </div>
 
               <div className="grid lg:grid-cols-12 gap-8 items-center">
@@ -383,7 +383,7 @@ function generateCulturalInsights() {
       title: 'Modesty as High Fashion Elegance',
       content: 'True luxury lies in intentional tailoring, flowing fabrics, and harmonious color palettes that honor personal values without compromising sophistication.',
       category: 'wisdom' as const,
-      source: 'KASHKHATI Philosophy',
+      source: 'deheiyya Philosophy',
       language: 'en' as const,
     },
     {
@@ -396,3 +396,4 @@ function generateCulturalInsights() {
     },
   ];
 }
+

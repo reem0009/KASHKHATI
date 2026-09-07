@@ -1,4 +1,4 @@
-# 🎯 KASHKHATI - منصة اكتشاف الذات الثقافية
+# 🎯 DEHEIYYA - منصة اكتشاف الذات الثقافية
 
 > **Cultural Self-Discovery Platform for the Middle East (Saudi, UAE, Palestine, Jordan)**
 
@@ -9,7 +9,7 @@ Full-stack monorepo — React 19 + TypeScript + Tailwind CSS + Express.js + Post
 ## 📦 Structure
 
 ```
-KASHKHATI/                 # ← هذا الريبو الوحيد
+DEHEIYYA/                  # ← هذا الريبو الوحيد
 ├── src/                   # Frontend (React + Vite)
 │   ├── pages/             # 7 صفحات (Home, Quiz, Avatar, Library, Blueprint, Cultural, Monetization)
 │   ├── components/ui/     # Button, Input, Card, Badge, Alert
@@ -35,7 +35,7 @@ KASHKHATI/                 # ← هذا الريبو الوحيد
 
 ### Windows — نقرة واحدة:
 ```bat
-# من داخل مجلد KASHKHATI
+# من داخل مجلد DEHEIYYA
 .\start.bat
 ```
 سيفتح **Backend** على `http://localhost:3000` و **Frontend** على `http://localhost:5173` تلقائياً.
@@ -57,7 +57,7 @@ npm run dev
 # → http://localhost:5173
 ```
 
-> **متطلبات:** Node.js 16+ و PostgreSQL 12+ مع قاعدة `kashkhati_db` (`createdb kashkhati_db`)
+> **متطلبات:** Node.js 16+ و PostgreSQL 12+ مع قاعدة `deheiyya_db` (`createdb deheiyya_db`)
 
 ---
 
@@ -69,7 +69,7 @@ npm run dev
 PORT=3000
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=kashkhati_db
+DB_NAME=deheiyya_db
 DB_USER=postgres
 DB_PASSWORD=postgres
 JWT_SECRET=your_super_secret_jwt_key_change_in_production
@@ -109,7 +109,7 @@ npm start
 
 - `START_HERE.md` — دليل البدء السريع
 - `backend/README.md` — توثيق الـ API
-- `KASHKHATI_COMPLETE_DOCUMENTATION.md` — التوثيق الشامل
+- `DEHEIYYA_COMPLETE_DOCUMENTATION.md` — التوثيق الشامل
 
 ---
 

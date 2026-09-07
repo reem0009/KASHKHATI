@@ -87,8 +87,8 @@ export const QuizFlow: React.FC<QuizProps> = ({ onComplete }) => {
       {/* Header */}
       <header className="max-w-4xl mx-auto w-full flex items-center justify-between z-10">
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-          <img src="/brand/kashkhati_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
-          <img src="/brand/kashkhati_logo.png" alt="KASHKHATI" className="h-4 w-auto object-contain brightness-125" />
+          <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+          <img src="/brand/deheiyya_logo.png" alt="deheiyya" className="h-4 w-auto object-contain brightness-125" />
         </div>
 
         <button 
@@ -104,7 +104,7 @@ export const QuizFlow: React.FC<QuizProps> = ({ onComplete }) => {
         
         {/* Progress Bar & Header */}
         <div className="mb-10 text-center">
-          <img src="/brand/kashkhati_motifs-pearl-bow.png" alt="Bow" className="h-7 w-auto mx-auto mb-3 object-contain opacity-80" />
+          <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Bow" className="h-7 w-auto mx-auto mb-3 object-contain opacity-80" />
           
           <div className="flex items-center justify-between text-xs text-[#F7F1E8]/60 mb-2 tracking-widest">
             <span>QUESTION {currentQuestionIndex + 1} OF {INITIAL_QUIZ_QUESTIONS.length}</span>
@@ -222,3 +222,4 @@ export const QuizFlow: React.FC<QuizProps> = ({ onComplete }) => {
     </div>
   );
 };
+

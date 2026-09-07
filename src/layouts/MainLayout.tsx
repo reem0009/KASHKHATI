@@ -18,7 +18,7 @@ export const MainLayout: React.FC = () => {
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">ك</span>
             </div>
-            <span className="font-semibold text-neutral-900">KASHKHATI</span>
+            <span className="font-semibold text-neutral-900">deheiyya</span>
           </div>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -62,7 +62,7 @@ export const MainLayout: React.FC = () => {
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <header className="bg-white border-b border-neutral-200 px-lg py-md flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-neutral-900">KASHKHATI</h1>
+          <h1 className="text-2xl font-bold text-neutral-900">deheiyya</h1>
           <div className="flex items-center gap-lg">
             <button className="p-md hover:bg-neutral-100 rounded-md transition-colors">
               🔔
@@ -103,3 +103,4 @@ const NavLink: React.FC<NavLinkProps> = ({ icon, label, open }) => {
     </div>
   );
 };
+
