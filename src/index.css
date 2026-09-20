@@ -1,4 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Noto+Kufi+Arabic:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500&display=swap');
+
+@font-face {
+  font-family: 'AdvertisingBold';
+  src: url('/The Brand/assets/fonts/AdvertisingBold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
 
 @tailwind base;
 @tailwind components;
@@ -11,11 +18,11 @@
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-kash-bg text-kash-ivory;
+    @apply bg-black text-[#EDEBDE];
     font-family: 'Inter', sans-serif;
   }
   ::selection {
-    @apply bg-brand-maroon text-white;
+    @apply bg-[#A50100] text-white;
   }
 }
 
@@ -35,14 +42,45 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   }
   .text-display {
-    font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+    font-family: 'Playfair Display', serif;
     letter-spacing: -0.02em;
   }
   .text-body {
-    font-family: 'Inter', 'Geist', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .text-wordmark {
+    font-family: 'AdvertisingBold', serif;
   }
   .text-arabic {
-    font-family: 'IBM Plex Sans Arabic', 'Noto Kufi Arabic', sans-serif;
+    font-family: 'Noto Kufi Arabic', sans-serif;
+  }
+  .text-arabic-display {
+    font-family: 'Noto Naskh Arabic', sans-serif;
+  }
+
+  /* DEHEIYYA Button Styles */
+  .btn-primary {
+    @apply px-4 py-2 rounded-lg font-medium transition-all bg-[#A50100] text-[#EDEBDE] hover:bg-[#8B0000] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply px-4 py-2 rounded-lg font-medium transition-all bg-black text-[#EDEBDE] border border-white/20 hover:border-white/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-accent {
+    @apply px-4 py-2 rounded-lg font-medium transition-all bg-[#EDEBDE] text-black hover:bg-white active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-outline {
+    @apply px-4 py-2 rounded-lg font-medium transition-all border border-[#A50100] text-[#A50100] hover:bg-[#A50100] hover:text-[#EDEBDE] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-ghost {
+    @apply px-4 py-2 rounded-lg font-medium transition-all text-[#EDEBDE] hover:bg-white/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Button Sizes */
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+  .btn-lg {
+    @apply px-6 py-3 text-lg;
   }
 }
 
