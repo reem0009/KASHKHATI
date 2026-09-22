@@ -270,40 +270,41 @@ export const HomePage = () => {
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
             <div className="lg:col-span-6 min-h-[480px]">
                <div className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
-                   {/* Character: hidden behind wall on open, one-time right-to-left reveal on downward scroll */}
-                   <motion.img
-                     src="/brand/hero/hero-character-profile.svg"
-                     alt="Woman in black abaya with red embroidered trim peeking from behind a wall"
-                     initial={reduced ? false : { x: '48%' }}
-                     animate={{ x: reduced || revealed ? '0%' : '48%' }}
-                     transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                     style={{ willChange: 'transform' }}
-                     className="absolute left-[10.5%] top-[-3%] z-10 w-[70%] aspect-[1868/3368] object-contain"
-                   />
+                  {/* Rigid reveal unit: character + hand share one transform so they move at the same time in the same way */}
+                  <motion.div
+                    className="absolute inset-0"
+                    initial={reduced ? false : { x: '20%' }}
+                    animate={{ x: reduced || revealed ? '0%' : '20%' }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    style={{ willChange: 'transform' }}
+                  >
+                    {/* Character: full.svg-mapped height so the abaya touches the frame bottom */}
+                    <img
+                      src="/brand/hero/hero-character-profile.svg"
+                      alt="Woman in black abaya with red embroidered trim peeking from behind a wall"
+                      className="absolute bottom-[-3%] left-[10%] z-10 h-[105%] w-auto max-w-none object-contain"
+                    />
+                    {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
+                    <div className="absolute right-0 top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
+                      {/* Hand: full.svg-mapped size/position, fingertips tuck behind the wall */}
+                      <motion.img
+                        src="/brand/hero/hero-hand.svg"
+                        alt=""
+                        aria-hidden="true"
+                        initial={reduced ? false : { opacity: 0 }}
+                        animate={{ opacity: reduced || revealed ? 1 : 0 }}
+                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                        style={{ willChange: 'transform' }}
+                        className="absolute left-[-14.7%] top-[66.1%] z-[15] h-[32.9%] w-auto max-w-none object-contain pointer-events-none"
+                      />
+                    </div>
+                  </motion.div>
                   {/* Wall: static, utmost right, full height */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
                     className="absolute right-0 top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
-                   {/* Hand: follows the character out from behind the wall edge */}
-                   <motion.img
-                     src="/brand/hero/hero-hand.svg"
-                     alt=""
-                     aria-hidden="true"
-                     initial={reduced ? false : { x: '80%', opacity: 0 }}
-                     animate={{
-                       x: reduced || revealed ? '0%' : '80%',
-                       opacity: reduced || revealed ? 1 : 0,
-                     }}
-                     transition={{
-                       duration: 0.35,
-                       delay: reduced || revealed ? 0.1 : 0,
-                       ease: [0.16, 1, 0.3, 1],
-                     }}
-                     style={{ willChange: 'transform' }}
-                     className="absolute left-[26%] top-[52%] z-30 h-[12%] w-auto object-contain pointer-events-none"
-                   />
                </div>
             </div>
 
