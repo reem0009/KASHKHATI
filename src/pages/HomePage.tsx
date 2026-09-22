@@ -10,7 +10,7 @@ export const HomePage = () => {
   const navigate = useNavigate()
   useLenis()
   const reduced = useReducedMotion()
-  const [lang, setLang] = useState<'en' | 'ar'>('en')
+  const [lang] = useState<'en' | 'ar'>('en')
   const heroRef = useRef<HTMLDivElement>(null)
 
   const { scrollY } = useScroll()
@@ -30,64 +30,10 @@ export const HomePage = () => {
       {/* Background Ambient Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
-      {/* Floating Header Navigation */}
-      <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8 transition-all duration-500">
-        <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
-           {/* Logo Brand Emblem */}
-           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-              <img 
-                src="/brand/seals/sealred.svg" 
-                alt="deheiyya Wax Seal" 
-                className="w-9 h-9 object-contain drop-shadow-[0_2px_10px_rgba(165,1,0,0.5)] transition-transform duration-300 hover:scale-105" 
-              />
-             <div className="flex flex-col">
-                <img 
-                  src="/brand/wordmark/wordmarkred.svg" 
-                  alt="deheiyya" 
-                  className="h-4 sm:h-5 w-auto object-contain brightness-125" 
-                />
-               <span className="text-[9px] tracking-[0.25em] text-[#EDEBDE]/50 uppercase font-light">كشختي • Cultural Beauty</span>
-             </div>
-          </div>
-
-          {/* Desktop Nav Items */}
-          <div className="hidden lg:flex items-center gap-8 text-[11px] font-medium tracking-[0.2em] text-[#EDEBDE]/70">
-            <a href="#discover" className="hover:text-[#EDEBDE] transition-colors">{t('DISCOVER', 'اكتشفي')}</a>
-            <a href="#philosophy" className="hover:text-[#EDEBDE] transition-colors">{t('PHILOSOPHY', 'الفلسفة')}</a>
-            <a href="#library" className="hover:text-[#EDEBDE] transition-colors">{t('LIBRARY', 'المكتبة')}</a>
-            <a href="#blueprint" className="hover:text-[#EDEBDE] transition-colors">{t('BLUEPRINT', 'الخريطة')}</a>
-            <a href="#pricing" className="hover:text-[#EDEBDE] transition-colors">{t('EXPERIENCE', 'الرحلة')}</a>
-          </div>
-
-          {/* Right Action Controls */}
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-              className="px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-[11px] tracking-widest text-[#EDEBDE] transition-all"
-            >
-              {lang === 'en' ? 'العربية' : 'ENGLISH'}
-            </button>
-
-            <motion.button
-              onClick={() => navigate('/quiz')}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="relative group overflow-hidden rounded-full bg-gradient-to-r from-[#A50100] to-black px-6 py-2.5 text-xs font-semibold tracking-wider text-[#EDEBDE] shadow-[0_4px_20px_rgba(165,1,0,0.4)] border border-[#A50100]/40"
-            >
-              <span className="relative z-10 flex items-center gap-2">
-                {t('Begin Discovery', 'ابدئي الاكتشاف')}
-                <ArrowRight className={cn("w-3.5 h-3.5 transition-transform group-hover:translate-x-1", lang === 'ar' && "rotate-180 group-hover:-translate-x-1")} />
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-[#A50100] via-white/20 to-[#A50100] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            </motion.button>
-          </div>
-        </nav>
-      </header>
-
       {/* HERO SECTION — Screenshot Reveal (Light Cream) */}
       <section 
         ref={heroRef} 
-        className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
+        className="relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           {/* Wordmark + Star Lockup — section top-left */}
