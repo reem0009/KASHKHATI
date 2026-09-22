@@ -9,6 +9,8 @@ export function useLenis() {
       smoothWheel: true,
     })
 
+    ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis
+
     let rafId: number
     const raf = (time: number) => {
       lenis.raf(time)
@@ -19,6 +21,9 @@ export function useLenis() {
     return () => {
       cancelAnimationFrame(rafId)
       lenis.destroy()
+      if ((window as unknown as { __lenis?: Lenis }).__lenis === lenis) {
+        delete (window as unknown as { __lenis?: Lenis }).__lenis
+      }
     }
   }, [])
 }

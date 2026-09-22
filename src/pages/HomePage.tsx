@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { cn } from '../lib/utils'
+
+type HeroRevealState = 'notStarted' | 'inProgress' | 'completed'
+
+const REVEAL_LOCK_MS = 550
 
 export const HomePage = () => {
   const navigate = useNavigate()
@@ -12,11 +16,184 @@ export const HomePage = () => {
   const reduced = useReducedMotion()
   const [lang] = useState<'en' | 'ar'>('en')
   const heroRef = useRef<HTMLDivElement>(null)
+  const [revealState, setRevealState] = useState<HeroRevealState>(() =>
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'completed'
+      : 'notStarted',
+  )
+  const revealRef = useRef<HeroRevealState>(revealState)
+  const lockTimer = useRef<number | null>(null)
 
-  const { scrollY } = useScroll()
-  const charX = useTransform(scrollY, [60, 300], ['48%', '0%'])
-  const handX = useTransform(scrollY, [260, 460], ['80%', '0%'])
-  const handO = useTransform(scrollY, [260, 340], [0, 1])
+  useEffect(() => {
+    revealRef.current = revealState
+  }, [revealState])
+
+  useEffect(() => {
+    if (reduced && revealRef.current === 'notStarted') {
+      revealRef.current = 'completed'
+      setRevealState('completed')
+    }
+  }, [reduced])
+
+  useEffect(() => {
+    if (reduced) return
+
+    const getLenis = () =>
+      (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis
+
+    const lockScroll = () => {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+      getLenis()?.stop()
+    }
+
+    const unlockScroll = () => {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+      getLenis()?.start()
+    }
+
+    const heroPinnedInView = () => {
+      const el = heroRef.current
+      if (!el) return false
+      const rect = el.getBoundingClientRect()
+      return rect.top <= 8 && rect.bottom > window.innerHeight * 0.4
+    }
+
+    const heroScrolledPast = () => {
+      const el = heroRef.current
+      if (!el) return false
+      return el.getBoundingClientRect().bottom < window.innerHeight * 0.5
+    }
+
+    const finish = () => {
+      if (lockTimer.current !== null) {
+        window.clearTimeout(lockTimer.current)
+        lockTimer.current = null
+      }
+      revealRef.current = 'completed'
+      setRevealState('completed')
+      unlockScroll()
+    }
+
+    const start = () => {
+      if (revealRef.current !== 'notStarted') return
+      revealRef.current = 'inProgress'
+      setRevealState('inProgress')
+      lockScroll()
+      if (lockTimer.current !== null) window.clearTimeout(lockTimer.current)
+      lockTimer.current = window.setTimeout(finish, REVEAL_LOCK_MS)
+    }
+
+    const onWheel = (e: WheelEvent) => {
+      if (revealRef.current === 'inProgress') {
+        e.preventDefault()
+        return
+      }
+      if (revealRef.current !== 'notStarted') return
+      if (e.deltaY <= 0) return
+      if (heroScrolledPast()) {
+        finish()
+        return
+      }
+      if (!heroPinnedInView()) return
+      e.preventDefault()
+      start()
+    }
+
+    let lastTouchY: number | null = null
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) lastTouchY = e.touches[0].clientY
+    }
+
+    const onTouchMove = (e: TouchEvent) => {
+      if (revealRef.current === 'inProgress') {
+        e.preventDefault()
+        return
+      }
+      if (revealRef.current !== 'notStarted' || lastTouchY === null) return
+      const currentY = e.touches.length > 0 ? e.touches[0].clientY : lastTouchY
+      const swipedUp = lastTouchY - currentY
+      lastTouchY = currentY
+      if (swipedUp <= 8) return
+      if (heroScrolledPast()) {
+        finish()
+        return
+      }
+      if (!heroPinnedInView()) return
+      e.preventDefault()
+      start()
+    }
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.key !== 'ArrowDown' &&
+        e.key !== 'PageDown' &&
+        e.key !== ' ' &&
+        e.key !== 'End'
+      ) {
+        return
+      }
+      if (revealRef.current === 'inProgress') {
+        e.preventDefault()
+        return
+      }
+      if (revealRef.current !== 'notStarted') return
+      if (heroScrolledPast()) {
+        finish()
+        return
+      }
+      if (!heroPinnedInView()) return
+      e.preventDefault()
+      start()
+    }
+
+    const onScroll = () => {
+      if (revealRef.current !== 'notStarted') return
+      if (window.scrollY <= 4) return
+      if (heroScrolledPast()) {
+        finish()
+        return
+      }
+      start()
+    }
+
+    window.addEventListener('wheel', onWheel, { passive: false, capture: true })
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: false, capture: true })
+    window.addEventListener('keydown', onKeyDown, { capture: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      if (lockTimer.current !== null) {
+        window.clearTimeout(lockTimer.current)
+        lockTimer.current = null
+      }
+      unlockScroll()
+      window.removeEventListener('wheel', onWheel, { capture: true })
+      window.removeEventListener('touchstart', onTouchStart)
+      window.removeEventListener('touchmove', onTouchMove, { capture: true })
+      window.removeEventListener('keydown', onKeyDown, { capture: true })
+      window.removeEventListener('scroll', onScroll)
+    }
+  }, [reduced])
+
+  const completeReveal = () => {
+    if (revealRef.current === 'completed') return
+    if (lockTimer.current !== null) {
+      window.clearTimeout(lockTimer.current)
+      lockTimer.current = null
+    }
+    revealRef.current = 'completed'
+    setRevealState('completed')
+    document.body.style.overflow = ''
+    document.documentElement.style.overflow = ''
+    ;(window as unknown as { __lenis?: { start: () => void } }).__lenis?.start()
+  }
+
+  const revealed = revealState !== 'notStarted'
 
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
@@ -84,7 +261,7 @@ export const HomePage = () => {
               </div>
 
               {/* Scroll Cue */}
-              <a href="#philosophy" className="mt-14 text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
+              <a href="#philosophy" onClick={completeReveal} className="mt-14 text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
                 {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
               </a>
             </motion.div>
@@ -93,27 +270,40 @@ export const HomePage = () => {
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
             <div className="lg:col-span-6 min-h-[480px]">
                <div className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
-                  {/* Character: hidden behind wall on open, scrubbed right-to-left on scroll */}
-                  <motion.img 
-                    src="/brand/hero/hero-character-profile.svg" 
-                    alt="Woman in black abaya with red embroidered trim peeking from behind a wall" 
-                    style={{ x: reduced ? 0 : charX }}
-                    className="absolute left-[10.5%] top-[-3%] z-10 w-[70%] aspect-[1868/3368] object-contain" 
-                  />
+                   {/* Character: hidden behind wall on open, one-time right-to-left reveal on downward scroll */}
+                   <motion.img
+                     src="/brand/hero/hero-character-profile.svg"
+                     alt="Woman in black abaya with red embroidered trim peeking from behind a wall"
+                     initial={reduced ? false : { x: '48%' }}
+                     animate={{ x: reduced || revealed ? '0%' : '48%' }}
+                     transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                     style={{ willChange: 'transform' }}
+                     className="absolute left-[10.5%] top-[-3%] z-10 w-[70%] aspect-[1868/3368] object-contain"
+                   />
                   {/* Wall: static, utmost right, full height */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
                     className="absolute right-0 top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
-                  {/* Hand: follows the character out from behind the wall edge */}
-                  <motion.img 
-                    src="/brand/hero/hero-hand.svg" 
-                    alt="" 
-                    aria-hidden="true"
-                    style={{ x: reduced ? 0 : handX, opacity: reduced ? 1 : handO }}
-                    className="absolute left-[26%] top-[52%] z-30 h-[12%] w-auto object-contain pointer-events-none" 
-                  />
+                   {/* Hand: follows the character out from behind the wall edge */}
+                   <motion.img
+                     src="/brand/hero/hero-hand.svg"
+                     alt=""
+                     aria-hidden="true"
+                     initial={reduced ? false : { x: '80%', opacity: 0 }}
+                     animate={{
+                       x: reduced || revealed ? '0%' : '80%',
+                       opacity: reduced || revealed ? 1 : 0,
+                     }}
+                     transition={{
+                       duration: 0.35,
+                       delay: reduced || revealed ? 0.1 : 0,
+                       ease: [0.16, 1, 0.3, 1],
+                     }}
+                     style={{ willChange: 'transform' }}
+                     className="absolute left-[26%] top-[52%] z-30 h-[12%] w-auto object-contain pointer-events-none"
+                   />
                </div>
             </div>
 
