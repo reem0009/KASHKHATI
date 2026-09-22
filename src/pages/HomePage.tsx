@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -14,11 +14,6 @@ export const HomePage = () => {
   const [scrolled, setScrolled] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
 
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const sx = useSpring(x, { damping: 25, stiffness: 120 })
-  const sy = useSpring(y, { damping: 25, stiffness: 120 })
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 30)
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -29,13 +24,6 @@ export const HomePage = () => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
     document.documentElement.lang = lang
   }, [lang])
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (reduced || window.matchMedia('(pointer: coarse)').matches) return
-    const rect = e.currentTarget.getBoundingClientRect()
-    x.set((e.clientX - (rect.left + rect.width / 2)) * 0.05)
-    y.set((e.clientY - (rect.top + rect.height / 2)) * 0.05)
-  }
 
   const t = (en: string, ar: string) => (lang === 'ar' ? ar : en)
 
@@ -106,10 +94,22 @@ export const HomePage = () => {
       {/* HERO SECTION — Screenshot Reveal (Light Cream) */}
       <section 
         ref={heroRef} 
-        onMouseMove={handleMouseMove} 
         className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
+          {/* Wordmark + Star Lockup — section top-left */}
+          <div className="flex items-center gap-3 mb-8">
+            <img 
+              src="/brand/logo/logolightmode.svg" 
+              alt="deheiyya star mark" 
+              className="h-8 w-8 object-contain shrink-0" 
+            />
+            <img 
+              src="/brand/wordmark/wordmarkblack.svg" 
+              alt="deheiyya" 
+              className="h-6 w-32 object-contain shrink-0" 
+            />
+          </div>
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
             {/* Left Copy — Screenshot Hero */}
@@ -119,20 +119,6 @@ export const HomePage = () => {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} 
               className="lg:col-span-6 text-center lg:text-start flex flex-col items-center lg:items-start"
             >
-              {/* Wordmark + Star Lockup */}
-              <div className="flex items-center gap-3 mb-10">
-                <img 
-                  src="/brand/logo/logolightmode.svg" 
-                  alt="deheiyya star mark" 
-                  className="h-7 w-auto object-contain" 
-                />
-                <img 
-                  src="/brand/wordmark/wordmarkblack.svg" 
-                  alt="deheiyya" 
-                  className="h-5 w-auto object-contain" 
-                />
-              </div>
-
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
                 {t('You were never meant to look like everyone else.', 'لم تُخلقي لتشبهي الجميع.')}
@@ -165,41 +151,38 @@ export const HomePage = () => {
             </motion.div>
 
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
-            <motion.div 
-              style={{ x: sx, y: sy }}
-              className="lg:col-span-6 relative flex justify-center items-center"
-            >
-               <div className="relative w-full max-w-lg aspect-[4/5] overflow-hidden">
-                  {/* Character — slides left-to-right first */}
+            {/* Scene space 1868x3368: character is full-scene; wall/hand placed at scene offsets */}
+            <div className="lg:col-span-6 relative flex justify-center items-center">
+               <div className="relative w-full max-w-lg aspect-[1868/3368] overflow-hidden">
+                  {/* Character — full scene, slides left-to-right first */}
                   <motion.img 
                     src="/brand/hero/hero-character-profile.svg" 
                     alt="Woman in black abaya with red embroidered trim peeking from behind a wall" 
-                    initial={reduced ? false : { x: '-55%' }}
+                    initial={reduced ? false : { x: '-100%' }}
                     whileInView={{ x: '0%' }}
                     viewport={{ once: true, margin: '-80px' }}
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 h-full w-full z-10" 
+                    className="absolute inset-0 z-10 h-full w-full object-contain" 
                   />
-                  {/* Wall — static foreground */}
+                  {/* Wall — static, scene x 975.6-1623.6, bottom-anchored */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
-                    alt="" 
-                    aria-hidden="true"
-                    className="absolute inset-0 h-full w-full z-20 pointer-events-none" 
+                    alt="Beige wall panel" 
+                    className="absolute bottom-0 left-[52.22%] z-20 w-[34.69%] aspect-[648/2014.462] object-contain pointer-events-none" 
                   />
-                  {/* Hand — follows left-to-right after the character */}
+                  {/* Hand — scene (664, 2256.5), emerges from behind the wall edge after the character */}
                   <motion.img 
                     src="/brand/hero/hero-hand.svg" 
                     alt="" 
                     aria-hidden="true"
-                    initial={reduced ? false : { x: '-70%', opacity: 0 }}
+                    initial={reduced ? false : { x: '60%', opacity: 0 }}
                     whileInView={{ x: '0%', opacity: 1 }}
                     viewport={{ once: true, margin: '-80px' }}
                     transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 h-full w-full z-30 pointer-events-none" 
+                    className="absolute left-[35.55%] top-[67%] z-30 w-[16.68%] aspect-[311.56604/1112.1775] object-contain pointer-events-none" 
                   />
                </div>
-            </motion.div>
+            </div>
 
           </div>
         </div>
