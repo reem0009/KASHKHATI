@@ -92,7 +92,7 @@ export const HomePage = () => {
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
             <div className="lg:col-span-6 min-h-[480px]">
-               <div className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[44vw]">
+               <div className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
                   {/* Character: hidden behind wall on open, scrubbed right-to-left on scroll */}
                   <motion.img 
                     src="/brand/hero/hero-character-profile.svg" 
