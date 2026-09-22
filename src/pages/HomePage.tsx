@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { motion, useMotionValue, useSpring } from 'framer-motion'
-import { Sparkles, ArrowRight, Compass, Layers, BookOpen, Gem, Crown, Check, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { cn } from '../lib/utils'
@@ -52,19 +52,19 @@ export const HomePage = () => {
             ? "bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]" 
             : "bg-transparent border border-white/5"
         )}>
-          {/* Logo Brand Emblem */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-             <img 
-               src="/brand/deheiyya_motifs-seal.png" 
-               alt="deheiyya Wax Seal" 
-               className="w-9 h-9 object-contain drop-shadow-[0_2px_10px_rgba(165,1,0,0.5)] transition-transform duration-300 hover:scale-105" 
-             />
-            <div className="flex flex-col">
-               <img 
-                 src="/brand/deheiyya_logo.png" 
-                 alt="deheiyya" 
-                 className="h-4 sm:h-5 w-auto object-contain brightness-125" 
-               />
+           {/* Logo Brand Emblem */}
+           <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+              <img 
+                src="/brand/seals/sealred.svg" 
+                alt="deheiyya Wax Seal" 
+                className="w-9 h-9 object-contain drop-shadow-[0_2px_10px_rgba(165,1,0,0.5)] transition-transform duration-300 hover:scale-105" 
+              />
+             <div className="flex flex-col">
+                <img 
+                  src="/brand/wordmark/wordmarkred.svg" 
+                  alt="deheiyya" 
+                  className="h-4 sm:h-5 w-auto object-contain brightness-125" 
+                />
                <span className="text-[9px] tracking-[0.25em] text-[#EDEBDE]/50 uppercase font-light">كشختي • Cultural Beauty</span>
              </div>
           </div>
@@ -103,130 +103,101 @@ export const HomePage = () => {
         </nav>
       </header>
 
-      {/* HERO SECTION — Cinematic Editorial Portal */}
+      {/* HERO SECTION — Screenshot Reveal (Light Cream) */}
       <section 
         ref={heroRef} 
         onMouseMove={handleMouseMove} 
-        className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden z-10"
+        className="relative min-h-screen pt-28 pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Left Copy & Brand Narrative */}
+            {/* Left Copy — Screenshot Hero */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} 
               className="lg:col-span-6 text-center lg:text-start flex flex-col items-center lg:items-start"
             >
-              {/* Pearl Bow Emblem Divider */}
-              <div className="flex items-center gap-3 mb-6">
+              {/* Wordmark + Star Lockup */}
+              <div className="flex items-center gap-3 mb-10">
                 <img 
-                  src="/brand/deheiyya_motifs-pearl-bow.png" 
-                  alt="Pearl Bow Motif" 
-                  className="h-7 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(247,241,232,0.3)] animate-pulse" 
+                  src="/brand/logo/logolightmode.svg" 
+                  alt="deheiyya star mark" 
+                  className="h-7 w-auto object-contain" 
                 />
-                <span className="text-[10px] tracking-[0.25em] uppercase text-[#F7F1E8]/60 font-medium">
-                  {t('PERSONALIZED CULTURAL BEAUTY DOSSIER', 'ملف الجمال الثقافي الشخصي')}
-                </span>
+                <img 
+                  src="/brand/wordmark/wordmarkblack.svg" 
+                  alt="deheiyya" 
+                  className="h-5 w-auto object-contain" 
+                />
               </div>
 
               {/* Main Headline */}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-light tracking-tight leading-[1.05] text-[#EDEBDE]">
-                {t('Discover the beauty that', 'اكتشفي الجمال الذي')}{' '}
-                <span className="italic font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#EDEBDE] via-[#A50100] to-[#A50100]">
-                  {t('suits you', 'يناسبكِ حقاً')}
-                </span>
+              <h1 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
+                {t('You were never meant to look like everyone else.', 'لم تُخلقي لتشبهي الجميع.')}
               </h1>
 
-              <p className="mt-6 text-base sm:text-lg text-[#EDEBDE]/70 max-w-xl font-light leading-relaxed">
+              <p className="mt-6 text-base sm:text-lg text-black/70 max-w-xl font-light leading-relaxed">
                 {t(
-                  'Expert guides on makeup, hair, skincare, fragrance, and style — tailored to your unique features, lifestyle, and cultural identity. Not trends. You.',
-                  'أدلة متخصصة في المكياج، الشعر، العناية، العطور، والأسلوب — مُصممة خصيصاً لملامحكِ الفريدة، نمط حياتكِ، وهويتكِ الثقافية.'
+                  'Discover beauty through your features, your lifestyle, your culture, and what feels authentically yours.',
+                  'اكتشفي الجمال عبر ملامحكِ، نمط حياتكِ، ثقافتكِ، وما يشبهكِ حقاً.'
                 )}
               </p>
 
-              {/* CTA Buttons & Social Proof */}
-              <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+              {/* CTA */}
+              <div className="mt-10">
                 <motion.button
                   onClick={() => navigate('/quiz')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#EDEBDE] text-black font-medium text-sm tracking-wide shadow-[0_10px_30px_rgba(237,235,222,0.15)] hover:bg-white transition-all flex items-center justify-center gap-3 group"
+                  whileHover={reduced ? undefined : { scale: 1.02 }}
+                  whileTap={reduced ? undefined : { scale: 0.98 }}
+                  className="px-8 py-4 rounded-full bg-[#A50100] text-[#EDEBDE] font-medium text-sm tracking-wider shadow-[0_10px_30px_rgba(165,1,0,0.35)] hover:bg-[#7d0100] transition-colors flex items-center justify-center gap-3 group"
                 >
-                  <span>{t('Start Your Beauty Profile', 'ابدئي ملفكِ الجمالي')}</span>
+                  <span>{t('BEGIN YOUR JOURNEY', 'ابدئي رحلتكِ')}</span>
                   <ArrowRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-1", lang === 'ar' && "rotate-180 group-hover:-translate-x-1")} />
                 </motion.button>
-
-                <button
-                  onClick={() => navigate('/library')}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-sm text-[#EDEBDE] transition-colors flex items-center justify-center gap-2"
-                >
-                  <BookOpen className="w-4 h-4 text-[#A50100]" />
-                  <span>{t('Explore The Library', 'استكشفي المكتبة')}</span>
-                </button>
               </div>
 
-              {/* Cultural Trust Indicators */}
-              <div className="mt-10 pt-8 border-t border-white/10 flex items-center gap-6 text-xs text-[#EDEBDE]/50">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#A50100]" />
-                  <span>{t('Culture-Aware & Respectful', 'واعية ومُحترمة للثقافة')}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#A50100]" />
-                  <span>{t('8 Personal Dimensions', '٨ أبعاد شخصية')}</span>
-                </div>
-              </div>
+              {/* Scroll Cue */}
+              <a href="#philosophy" className="mt-14 text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
+                {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
+              </a>
             </motion.div>
 
-            {/* Right Showcase Frame — Diverse Cultural Women & Editorial Book */}
+            {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
             <motion.div 
               style={{ x: sx, y: sy }}
               className="lg:col-span-6 relative flex justify-center items-center"
             >
-               <div className="relative w-full max-w-lg aspect-[4/5] rounded-[32px] overflow-hidden p-2 bg-gradient-to-b from-white/15 via-white/5 to-transparent border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.9)] backdrop-blur-2xl">
-                 
-                 {/* Background Cultural Hero Showcase Image */}
-                 <div className="relative w-full h-full rounded-[26px] overflow-hidden group">
-                   <img 
-                     src="/brand/deheiyya_brand_in_action2.png" 
-                     alt="deheiyya Cultural Diversity Showcase" 
-                     className="w-full h-full object-cover object-center transform transition-transform duration-1000 group-hover:scale-105"
-                   />
-                   
-                   {/* Subtle Dark Vignette & Gold Frame Overlay */}
-                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30" />
-                   
-                   {/* Floating Wax Seal Stamp Emblem */}
-                   <div className="absolute top-6 right-6 flex items-center gap-2 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/15 shadow-xl">
-                     <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-6 h-6 object-contain" />
-                     <span className="text-[10px] tracking-widest uppercase text-[#EDEBDE]">AUTHENTICATED DOSSIER</span>
-                   </div>
-
-                   {/* Bottom Overlay Info Card */}
-                   <div className="absolute bottom-6 inset-x-6 p-5 rounded-2xl bg-black/85 backdrop-blur-xl border border-white/15 shadow-2xl flex items-center justify-between">
-                     <div className="flex items-center gap-3">
-                       <div className="w-10 h-10 rounded-full bg-black border border-[#A50100]/50 flex items-center justify-center">
-                         <Gem className="w-5 h-5 text-[#EDEBDE]" />
-                       </div>
-                       <div>
-                         <h4 className="text-xs font-semibold text-[#EDEBDE]">{t('Your Beauty Blueprint', 'خريطتكِ الجمالية')}</h4>
-                         <p className="text-[11px] text-[#EDEBDE]/60">{t('Features • Undertone • Hijab • Style', 'الملامح • البشرة • الحجاب • النمط')}</p>
-                       </div>
-                     </div>
-                     <span className="px-3 py-1 rounded-full bg-[#A50100]/20 border border-[#A50100]/40 text-[10px] tracking-widest text-[#EDEBDE]">
-                       PRO
-                     </span>
-                   </div>
-                 </div>
-
-                 {/* Floating Pearl Bow Accent Top Left */}
-                 <img 
-                   src="/brand/deheiyya_motifs-pearl-bow.png" 
-                   alt="Pearl Bow" 
-                   className="absolute -top-4 -left-4 w-16 h-16 object-contain drop-shadow-[0_4px_20px_rgba(237,235,222,0.4)] pointer-events-none"
-                 />
+               <div className="relative w-full max-w-lg aspect-[4/5] overflow-hidden">
+                  {/* Character — slides left-to-right first */}
+                  <motion.img 
+                    src="/brand/hero/hero-character-profile.svg" 
+                    alt="Woman in black abaya with red embroidered trim peeking from behind a wall" 
+                    initial={reduced ? false : { x: '-55%' }}
+                    whileInView={{ x: '0%' }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 h-full w-full z-10" 
+                  />
+                  {/* Wall — static foreground */}
+                  <img 
+                    src="/brand/hero/hero-wall.svg" 
+                    alt="" 
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full z-20 pointer-events-none" 
+                  />
+                  {/* Hand — follows left-to-right after the character */}
+                  <motion.img 
+                    src="/brand/hero/hero-hand.svg" 
+                    alt="" 
+                    aria-hidden="true"
+                    initial={reduced ? false : { x: '-70%', opacity: 0 }}
+                    whileInView={{ x: '0%', opacity: 1 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 h-full w-full z-30 pointer-events-none" 
+                  />
                </div>
             </motion.div>
 
@@ -239,7 +210,7 @@ export const HomePage = () => {
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           
           <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] tracking-[0.25em] text-[#EDEBDE]/70 uppercase mb-8">
-            <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-4 h-4 object-contain" />
+            <img src="/brand/seals/sealblack.svg" alt="Seal" className="w-4 h-4 object-contain" />
             <span>{t('BRAND PHILOSOPHY', 'فلسفة كشختي')}</span>
           </div>
 
@@ -281,7 +252,6 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="text-center mb-16">
-            <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Bow" className="h-8 w-auto mx-auto mb-4 object-contain" />
             <h2 className="text-3xl sm:text-4xl font-display font-light text-[#EDEBDE]">
               {t('How Your Journey Unfolds', 'كيف تسير رحلة استكشافكِ')}
             </h2>
@@ -393,7 +363,7 @@ export const HomePage = () => {
                   <span className="px-3 py-1 rounded-full bg-black text-[#EDEBDE] text-[10px] tracking-widest">
                     PERSONAL REPORT
                   </span>
-                  <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-8 h-8 object-contain" />
+                   <img src="/brand/seals/sealblack.svg" alt="Seal" className="w-8 h-8 object-contain" />
                 </div>
                 <h3 className="text-2xl font-display font-bold mt-4 text-black">
                   {t('Avatar & Style Report', 'تقرير الصورة الرمزية والأسلوب')}
@@ -465,7 +435,7 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <img src="/brand/deheiyya_motifs-seal.png" alt="Seal" className="w-10 h-10 mx-auto mb-4 object-contain" />
+            <img src="/brand/seals/sealred.svg" alt="Seal" className="w-10 h-10 mx-auto mb-4 object-contain" />
             <h2 className="text-3xl sm:text-5xl font-display font-light text-[#EDEBDE]">
               {t('Choose Your Path', 'اختاري مستوى رحلتكِ')}
             </h2>
@@ -567,7 +537,6 @@ export const HomePage = () => {
       {/* FINAL CALL TO ACTION */}
       <section className="py-28 bg-gradient-to-b from-black via-black/40 to-black text-center relative overflow-hidden border-t border-white/10">
         <div className="max-w-4xl mx-auto px-6 relative z-10">
-          <img src="/brand/deheiyya_motifs-pearl-bow.png" alt="Pearl Bow" className="h-10 w-auto mx-auto mb-6 object-contain" />
           
           <h2 className="text-3xl sm:text-6xl font-display font-light text-[#EDEBDE] leading-tight">
             {t('Reveal the version of yourself', 'اكتشفي النسخة الأجمل من نفسكِ')}<br />
@@ -601,7 +570,7 @@ export const HomePage = () => {
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             
             <div className="flex flex-col items-center md:items-start gap-2">
-              <img src="/brand/deheiyya_logo.png" alt="deheiyya" className="h-6 w-auto object-contain brightness-125" />
+              <img src="/brand/wordmark/wordmarkred.svg" alt="deheiyya" className="h-6 w-auto object-contain brightness-125" />
               <p className="text-xs text-[#EDEBDE]/50 font-light">
                 {t('Personalized Cultural Beauty Library', 'مكتبة الجمال الثقافية المخصصة')}
               </p>
