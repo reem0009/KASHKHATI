@@ -14,8 +14,8 @@ export const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null)
 
   const { scrollY } = useScroll()
-  const charX = useTransform(scrollY, [60, 300], ['40%', '0%'])
-  const handX = useTransform(scrollY, [260, 460], ['55%', '0%'])
+  const charX = useTransform(scrollY, [60, 300], ['48%', '0%'])
+  const handX = useTransform(scrollY, [260, 460], ['80%', '0%'])
   const handO = useTransform(scrollY, [260, 340], [0, 1])
 
   useEffect(() => {
@@ -95,12 +95,12 @@ export const HomePage = () => {
             <img 
               src="/brand/logo/logolightmode.svg" 
               alt="deheiyya star mark" 
-              className="h-8 w-8 object-contain shrink-0" 
+                  className="h-9 w-9 object-contain shrink-0" 
             />
                 <img 
                   src="/brand/wordmark/wordmarkblack.svg" 
                   alt="deheiyya" 
-                  className="h-6 w-[84px] object-contain shrink-0" 
+                  className="h-7 w-[96px] object-contain shrink-0" 
                 />
           </div>
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
@@ -130,7 +130,7 @@ export const HomePage = () => {
                   onClick={() => navigate('/quiz')}
                   whileHover={reduced ? undefined : { scale: 1.02 }}
                   whileTap={reduced ? undefined : { scale: 0.98 }}
-                  className="px-8 py-4 rounded-full bg-[#A50100] text-[#EDEBDE] font-medium text-sm tracking-wider shadow-[0_10px_30px_rgba(165,1,0,0.35)] hover:bg-[#7d0100] transition-colors flex items-center justify-center gap-3 group"
+                  className="px-8 py-4 rounded-[10px] bg-[#A50100] text-[#EDEBDE] font-medium text-sm tracking-wider shadow-[0_10px_30px_rgba(165,1,0,0.35)] hover:bg-[#7d0100] transition-colors flex items-center justify-center gap-3 group"
                 >
                   <span>{t('BEGIN YOUR JOURNEY', 'ابدئي رحلتكِ')}</span>
                   <ArrowRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-1", lang === 'ar' && "rotate-180 group-hover:-translate-x-1")} />
@@ -145,20 +145,20 @@ export const HomePage = () => {
 
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
-            <div className="lg:col-span-6 relative min-h-[480px]">
-               <div className="absolute right-0 inset-y-0 aspect-[1600/3109] overflow-hidden">
+            <div className="lg:col-span-6 min-h-[480px]">
+               <div className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[44vw]">
                   {/* Character: hidden behind wall on open, scrubbed right-to-left on scroll */}
                   <motion.img 
                     src="/brand/hero/hero-character-profile.svg" 
                     alt="Woman in black abaya with red embroidered trim peeking from behind a wall" 
                     style={{ x: reduced ? 0 : charX }}
-                    className="absolute left-[-8.79%] top-[0.1%] z-10 w-[107.13%] aspect-[1868/3368] object-contain" 
+                    className="absolute left-[10.5%] top-[-3%] z-10 w-[70%] aspect-[1868/3368] object-contain" 
                   />
                   {/* Wall: static, utmost right, full height */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
-                    className="absolute right-0 top-0 z-20 h-full w-auto object-contain pointer-events-none" 
+                    className="absolute right-0 top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
                   {/* Hand: follows the character out from behind the wall edge */}
                   <motion.img 
@@ -166,7 +166,7 @@ export const HomePage = () => {
                     alt="" 
                     aria-hidden="true"
                     style={{ x: reduced ? 0 : handX, opacity: reduced ? 1 : handO }}
-                    className="absolute left-[28.5%] top-[66.21%] z-30 w-[17.87%] aspect-[311.56604/1112.1775] object-contain pointer-events-none" 
+                    className="absolute left-[26%] top-[52%] z-30 h-[12%] w-auto object-contain pointer-events-none" 
                   />
                </div>
             </div>
