@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -11,14 +11,12 @@ export const HomePage = () => {
   useLenis()
   const reduced = useReducedMotion()
   const [lang, setLang] = useState<'en' | 'ar'>('en')
-  const [scrolled, setScrolled] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 30)
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const { scrollY } = useScroll()
+  const charX = useTransform(scrollY, [60, 300], ['40%', '0%'])
+  const handX = useTransform(scrollY, [260, 460], ['55%', '0%'])
+  const handO = useTransform(scrollY, [260, 340], [0, 1])
 
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
@@ -34,12 +32,7 @@ export const HomePage = () => {
 
       {/* Floating Header Navigation */}
       <header className="fixed top-0 inset-x-0 z-50 pt-4 px-4 sm:px-8 transition-all duration-500">
-        <nav className={cn(
-          "max-w-7xl mx-auto flex items-center justify-between px-6 py-3.5 rounded-full transition-all duration-500",
-          scrolled 
-            ? "bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]" 
-            : "bg-transparent border border-white/5"
-        )}>
+        <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.8)]">
            {/* Logo Brand Emblem */}
            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
               <img 
@@ -104,20 +97,20 @@ export const HomePage = () => {
               alt="deheiyya star mark" 
               className="h-8 w-8 object-contain shrink-0" 
             />
-            <img 
-              src="/brand/wordmark/wordmarkblack.svg" 
-              alt="deheiyya" 
-              className="h-6 w-32 object-contain shrink-0" 
-            />
+                <img 
+                  src="/brand/wordmark/wordmarkblack.svg" 
+                  alt="deheiyya" 
+                  className="h-6 w-[84px] object-contain shrink-0" 
+                />
           </div>
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
             
             {/* Left Copy — Screenshot Hero */}
             <motion.div 
               initial={{ opacity: 0, y: 30 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} 
-              className="lg:col-span-6 text-center lg:text-start flex flex-col items-center lg:items-start"
+              className="lg:col-span-6 text-center lg:text-start flex flex-col items-center lg:items-start self-center"
             >
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
@@ -152,34 +145,28 @@ export const HomePage = () => {
 
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
-            <div className="lg:col-span-6 relative flex justify-center items-center">
-               <div className="relative w-full max-w-lg aspect-[1868/3368] overflow-hidden">
-                  {/* Character — full scene art, slides left-to-right first */}
+            <div className="lg:col-span-6 relative min-h-[480px]">
+               <div className="absolute right-0 inset-y-0 aspect-[1600/3109] overflow-hidden">
+                  {/* Character: hidden behind wall on open, scrubbed right-to-left on scroll */}
                   <motion.img 
                     src="/brand/hero/hero-character-profile.svg" 
                     alt="Woman in black abaya with red embroidered trim peeking from behind a wall" 
-                    initial={reduced ? false : { x: '-110%' }}
-                    whileInView={{ x: '0%' }}
-                    viewport={{ once: true, margin: '-80px' }}
-                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute left-[9.29%] top-[-0.33%] z-10 h-full w-full object-contain" 
+                    style={{ x: reduced ? 0 : charX }}
+                    className="absolute left-[-8.79%] top-[0.1%] z-10 w-[107.13%] aspect-[1868/3368] object-contain" 
                   />
-                  {/* Wall — static, composed box left 52.48% / top -0.23% / width 58.33% */}
+                  {/* Wall: static, utmost right, full height */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
-                    className="absolute left-[52.48%] top-[-0.23%] z-20 w-[58.33%] aspect-[648/2014.462] object-contain pointer-events-none" 
+                    className="absolute right-0 top-0 z-20 h-full w-auto object-contain pointer-events-none" 
                   />
-                  {/* Hand — grip crop, emerges from behind the wall edge after the character */}
+                  {/* Hand: follows the character out from behind the wall edge */}
                   <motion.img 
                     src="/brand/hero/hero-hand.svg" 
                     alt="" 
                     aria-hidden="true"
-                    initial={reduced ? false : { x: '60%', opacity: 0 }}
-                    whileInView={{ x: '0%', opacity: 1 }}
-                    viewport={{ once: true, margin: '-80px' }}
-                    transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute left-[44.08%] top-[66.36%] z-30 w-[16.68%] aspect-[311.56604/1112.1775] object-contain pointer-events-none" 
+                    style={{ x: reduced ? 0 : handX, opacity: reduced ? 1 : handO }}
+                    className="absolute left-[28.5%] top-[66.21%] z-30 w-[17.87%] aspect-[311.56604/1112.1775] object-contain pointer-events-none" 
                   />
                </div>
             </div>
