@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { animate, motion, useMotionValue } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
@@ -16,6 +16,7 @@ export const HomePage = () => {
   const reduced = useReducedMotion()
   const [lang] = useState<'en' | 'ar'>('en')
   const heroRef = useRef<HTMLDivElement>(null)
+  const frameRef = useRef<HTMLDivElement>(null)
   const [revealState, setRevealState] = useState<HeroRevealState>(() =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
@@ -25,6 +26,18 @@ export const HomePage = () => {
   )
   const revealRef = useRef<HeroRevealState>(revealState)
   const lockTimer = useRef<number | null>(null)
+  const mx = useMotionValue(0)
+
+  useLayoutEffect(() => {
+    if (reduced) return
+    const setHidden = () => {
+      if (revealRef.current !== 'notStarted') return
+      mx.set(-0.2 * (frameRef.current?.clientWidth ?? 0))
+    }
+    setHidden()
+    window.addEventListener('resize', setHidden)
+    return () => window.removeEventListener('resize', setHidden)
+  }, [reduced, mx])
 
   useEffect(() => {
     revealRef.current = revealState
@@ -73,6 +86,7 @@ export const HomePage = () => {
         window.clearTimeout(lockTimer.current)
         lockTimer.current = null
       }
+      if (revealRef.current === 'notStarted') mx.set(0)
       revealRef.current = 'completed'
       setRevealState('completed')
       unlockScroll()
@@ -82,6 +96,7 @@ export const HomePage = () => {
       if (revealRef.current !== 'notStarted') return
       revealRef.current = 'inProgress'
       setRevealState('inProgress')
+      animate(mx, 0, { duration: 0.45, ease: [0.16, 1, 0.3, 1] })
       lockScroll()
       if (lockTimer.current !== null) window.clearTimeout(lockTimer.current)
       lockTimer.current = window.setTimeout(finish, REVEAL_LOCK_MS)
@@ -171,6 +186,7 @@ export const HomePage = () => {
         window.clearTimeout(lockTimer.current)
         lockTimer.current = null
       }
+      mx.stop()
       unlockScroll()
       window.removeEventListener('wheel', onWheel, { capture: true })
       window.removeEventListener('touchstart', onTouchStart)
@@ -178,7 +194,7 @@ export const HomePage = () => {
       window.removeEventListener('keydown', onKeyDown, { capture: true })
       window.removeEventListener('scroll', onScroll)
     }
-  }, [reduced])
+  }, [reduced, mx])
 
   const completeReveal = () => {
     if (revealRef.current === 'completed') return
@@ -186,6 +202,7 @@ export const HomePage = () => {
       window.clearTimeout(lockTimer.current)
       lockTimer.current = null
     }
+    mx.set(0)
     revealRef.current = 'completed'
     setRevealState('completed')
     document.body.style.overflow = ''
@@ -269,14 +286,11 @@ export const HomePage = () => {
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
             <div className="lg:col-span-6 min-h-[480px]">
-               <div className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
-                  {/* Rigid reveal unit: character + hand share one transform so they move at the same time in the same way */}
+               <div ref={frameRef} className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
+                  {/* Character layer: stays behind the wall */}
                   <motion.div
                     className="absolute inset-0"
-                    initial={reduced ? false : { x: '20%' }}
-                    animate={{ x: reduced || revealed ? '0%' : '20%' }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                    style={{ willChange: 'transform' }}
+                    style={{ x: mx, willChange: 'transform' }}
                   >
                     {/* Character: full.svg-mapped height so the abaya touches the frame bottom */}
                     <img
@@ -284,20 +298,6 @@ export const HomePage = () => {
                       alt="Woman in black abaya with red embroidered trim peeking from behind a wall"
                       className="absolute bottom-[-3%] left-[10%] z-10 h-[105%] w-auto max-w-none object-contain"
                     />
-                    {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
-                    <div className="absolute right-0 top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
-                      {/* Hand: full.svg-mapped size/position, fingertips tuck behind the wall */}
-                      <motion.img
-                        src="/brand/hero/hero-hand.svg"
-                        alt=""
-                        aria-hidden="true"
-                        initial={reduced ? false : { opacity: 0 }}
-                        animate={{ opacity: reduced || revealed ? 1 : 0 }}
-                        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                        style={{ willChange: 'transform' }}
-                        className="absolute left-[-14.7%] top-[66.1%] z-[15] h-[32.9%] w-auto max-w-none object-contain pointer-events-none"
-                      />
-                    </div>
                   </motion.div>
                   {/* Wall: static, utmost right, full height */}
                   <img 
@@ -305,6 +305,21 @@ export const HomePage = () => {
                     alt="Beige wall panel" 
                     className="absolute right-0 top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
+                  {/* Hand layer: above the wall so the fingers show */}
+                  {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
+                  <div className="absolute right-0 top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
+                    {/* Hand: full.svg-mapped size/position, fingertips over the wall edge */}
+                    <motion.img
+                      src="/brand/hero/hero-hand.svg"
+                      alt=""
+                      aria-hidden="true"
+                      style={{ x: mx }}
+                      initial={reduced ? false : { opacity: 0 }}
+                      animate={{ opacity: reduced || revealed ? 1 : 0 }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute left-[-14.7%] top-[66.1%] z-30 h-[32.9%] w-auto max-w-none object-contain pointer-events-none"
+                    />
+                  </div>
                </div>
             </div>
 
