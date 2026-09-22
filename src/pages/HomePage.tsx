@@ -151,26 +151,26 @@ export const HomePage = () => {
             </motion.div>
 
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
-            {/* Scene space 1868x3368: character is full-scene; wall/hand placed at scene offsets */}
+            {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
             <div className="lg:col-span-6 relative flex justify-center items-center">
                <div className="relative w-full max-w-lg aspect-[1868/3368] overflow-hidden">
-                  {/* Character — full scene, slides left-to-right first */}
+                  {/* Character — full scene art, slides left-to-right first */}
                   <motion.img 
                     src="/brand/hero/hero-character-profile.svg" 
                     alt="Woman in black abaya with red embroidered trim peeking from behind a wall" 
-                    initial={reduced ? false : { x: '-100%' }}
+                    initial={reduced ? false : { x: '-110%' }}
                     whileInView={{ x: '0%' }}
                     viewport={{ once: true, margin: '-80px' }}
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 z-10 h-full w-full object-contain" 
+                    className="absolute left-[9.29%] top-[-0.33%] z-10 h-full w-full object-contain" 
                   />
-                  {/* Wall — static, scene x 975.6-1623.6, bottom-anchored */}
+                  {/* Wall — static, composed box left 52.48% / top -0.23% / width 58.33% */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
-                    className="absolute bottom-0 left-[52.22%] z-20 w-[34.69%] aspect-[648/2014.462] object-contain pointer-events-none" 
+                    className="absolute left-[52.48%] top-[-0.23%] z-20 w-[58.33%] aspect-[648/2014.462] object-contain pointer-events-none" 
                   />
-                  {/* Hand — scene (664, 2256.5), emerges from behind the wall edge after the character */}
+                  {/* Hand — grip crop, emerges from behind the wall edge after the character */}
                   <motion.img 
                     src="/brand/hero/hero-hand.svg" 
                     alt="" 
@@ -179,7 +179,7 @@ export const HomePage = () => {
                     whileInView={{ x: '0%', opacity: 1 }}
                     viewport={{ once: true, margin: '-80px' }}
                     transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute left-[35.55%] top-[67%] z-30 w-[16.68%] aspect-[311.56604/1112.1775] object-contain pointer-events-none" 
+                    className="absolute left-[44.08%] top-[66.36%] z-30 w-[16.68%] aspect-[311.56604/1112.1775] object-contain pointer-events-none" 
                   />
                </div>
             </div>
