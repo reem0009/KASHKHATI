@@ -231,16 +231,16 @@ export const HomePage = () => {
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           {/* Wordmark + Star Lockup — section top-left */}
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-2.5 mb-8">
             <img 
               src="/brand/logo/logolightmode.svg" 
               alt="deheiyya star mark" 
-                  className="h-9 w-9 object-contain shrink-0" 
+                  className="h-[46px] w-[46px] object-contain shrink-0" 
             />
                 <img 
                   src="/brand/wordmark/wordmarkblack.svg" 
                   alt="deheiyya" 
-                  className="h-[38px] w-[106px] object-contain shrink-0" 
+                  className="h-[48px] w-[116px] object-contain shrink-0" 
                 />
           </div>
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
