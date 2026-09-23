@@ -240,7 +240,7 @@ export const HomePage = () => {
                 <img 
                   src="/brand/wordmark/wordmarkblack.svg" 
                   alt="deheiyya" 
-                  className="h-[48px] w-[116px] object-contain shrink-0" 
+                  className="h-[48px] w-[284px] -ml-[58px] object-contain shrink-0" 
                 />
           </div>
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
