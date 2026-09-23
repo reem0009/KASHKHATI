@@ -32,7 +32,7 @@ export const HomePage = () => {
     if (reduced) return
     const setHidden = () => {
       if (revealRef.current !== 'notStarted') return
-      mx.set(-0.2 * (frameRef.current?.clientWidth ?? 0))
+      mx.set(0.15 * (frameRef.current?.clientWidth ?? 0))
     }
     setHidden()
     window.addEventListener('resize', setHidden)
