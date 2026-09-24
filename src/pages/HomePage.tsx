@@ -237,11 +237,16 @@ export const HomePage = () => {
               alt="deheiyya star mark" 
                   className="h-[46px] w-[46px] object-contain shrink-0" 
             />
-                <img 
-                  src="/brand/wordmark/wordmarkblack.svg" 
-                  alt="deheiyya" 
-                  className="h-[48px] w-[284px] -ml-[58px] object-contain shrink-0" 
-                />
+                <div className="flex flex-col justify-center">
+                  <img 
+                    src="/brand/wordmark/wordmarkblack.svg" 
+                    alt="deheiyya" 
+                    className="h-[48px] w-[284px] -ml-[58px] object-contain shrink-0" 
+                  />
+                  <span className="ml-[58px] mt-1 text-[11px] tracking-[0.2em] text-black/60">
+                    Authentic · Cultural · Personal
+                  </span>
+                </div>
           </div>
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
             
