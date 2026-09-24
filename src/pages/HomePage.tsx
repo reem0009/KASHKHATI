@@ -8,7 +8,7 @@ import { cn } from '../lib/utils'
 
 type HeroRevealState = 'notStarted' | 'inProgress' | 'completed'
 
-const REVEAL_LOCK_MS = 550
+const REVEAL_LOCK_MS = 900
 
 export const HomePage = () => {
   const navigate = useNavigate()
@@ -96,7 +96,7 @@ export const HomePage = () => {
       if (revealRef.current !== 'notStarted') return
       revealRef.current = 'inProgress'
       setRevealState('inProgress')
-      animate(mx, 0, { duration: 0.45, ease: [0.16, 1, 0.3, 1] })
+      animate(mx, 0, { duration: 0.8, ease: [0.16, 1, 0.3, 1] })
       lockScroll()
       if (lockTimer.current !== null) window.clearTimeout(lockTimer.current)
       lockTimer.current = window.setTimeout(finish, REVEAL_LOCK_MS)
@@ -316,7 +316,7 @@ export const HomePage = () => {
                       style={{ x: mx }}
                       initial={reduced ? false : { opacity: 0 }}
                       animate={{ opacity: reduced || revealed ? 1 : 0 }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute left-[-14.7%] top-[66.1%] z-30 h-[32.9%] w-auto max-w-none object-contain pointer-events-none"
                     />
                   </div>
