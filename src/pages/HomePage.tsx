@@ -283,7 +283,7 @@ export const HomePage = () => {
                   src="/brand/dividers/dividersmall.svg"
                   alt=""
                   aria-hidden="true"
-                  className="h-auto w-[119%] -ml-[7.4%] -mr-[11.7%] object-contain py-[5px]"
+                  className="h-auto w-[143%] max-w-none -ml-[9%] -mr-[34%] object-contain py-[5px]"
                 />
                 <a href="#philosophy" onClick={completeReveal} className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
                 {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
