@@ -278,7 +278,13 @@ export const HomePage = () => {
               </div>
 
               {/* Scroll Cue */}
-              <a href="#philosophy" onClick={completeReveal} className="mt-14 text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
+              <img
+                src="/brand/dividers/dividersmall.svg"
+                alt=""
+                aria-hidden="true"
+                className="mt-14 w-[146px] max-w-full h-auto object-contain py-[5px]"
+              />
+              <a href="#philosophy" onClick={completeReveal} className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
                 {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
               </a>
             </motion.div>
