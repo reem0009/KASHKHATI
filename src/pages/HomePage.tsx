@@ -278,15 +278,17 @@ export const HomePage = () => {
               </div>
 
               {/* Scroll Cue */}
-              <img
-                src="/brand/dividers/dividersmall.svg"
-                alt=""
-                aria-hidden="true"
-                className="mt-14 w-[146px] max-w-full h-auto object-contain py-[5px]"
-              />
-              <a href="#philosophy" onClick={completeReveal} className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
+              <div className="mt-14 flex w-fit flex-col items-center lg:items-start">
+                <img
+                  src="/brand/dividers/dividersmall.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="h-auto w-[109%] -ml-[7.5%] -mr-[1.5%] object-contain py-[5px]"
+                />
+                <a href="#philosophy" onClick={completeReveal} className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
                 {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
               </a>
+              </div>
             </motion.div>
 
             {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
