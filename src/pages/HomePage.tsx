@@ -243,7 +243,7 @@ export const HomePage = () => {
                     alt="deheiyya" 
                     className="h-[48px] w-[284px] -ml-[58px] object-contain shrink-0" 
                   />
-                  <span className="ml-[5px] mt-1 text-[11px] tracking-[0.2em] text-black/60">
+                  <span className="ml-[10px] mt-1 text-[11px] tracking-[0.2em] text-black/60">
                     Authentic · Cultural · Personal
                   </span>
                 </div>
