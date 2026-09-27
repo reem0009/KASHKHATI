@@ -241,13 +241,13 @@ export const HomePage = () => {
                   <img 
                     src="/brand/wordmark/wordmarkblack.svg" 
                     alt="deheiyya" 
-                    className="h-[48px] w-[284px] max-w-none -ml-[58px] object-contain shrink-0" 
+                    className="h-[58px] w-[343px] max-w-none -ml-[71px] object-contain shrink-0" 
                   />
-                  <div className="mt-1 flex w-[166px] items-center justify-between text-[9px] tracking-[0.12em] text-black/60">
+                  <div className="-mt-[4px] flex w-[202px] items-center justify-between text-[8px] tracking-[0.2em] text-black/60">
                     <span className="whitespace-nowrap">CULTURE</span>
-                    <span className="text-[8px] text-[#A50100]">✦</span>
+                    <span className="text-[7px] text-[#A50100]">✦</span>
                     <span className="whitespace-nowrap">SELF-EXPRESSION</span>
-                    <span className="text-[8px] text-[#A50100]">✦</span>
+                    <span className="text-[7px] text-[#A50100]">✦</span>
                     <span className="whitespace-nowrap">YOU</span>
                   </div>
                 </div>
