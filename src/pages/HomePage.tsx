@@ -32,7 +32,7 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
     src: '/brand/scene2/Sarwa%20%20Cypress%20Tree%20Hebron.png',
     alt: 'Sarwa Cypress Tree embroidery motif from Hebron',
     label: 'Cypress Tree Hebron',
-    top: 'top-[calc(57%-20px)]',
+    top: 'top-[calc(52%-20px)]',
     right: 'md:right-[calc(72.4vh+32px)]',
   },
 ]
