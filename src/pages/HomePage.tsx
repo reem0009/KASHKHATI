@@ -17,6 +17,7 @@ type MotifCallout = {
   alt: string
   label: string
   top: string
+  right: string
 }
 
 const MOTIF_CALLOUTS: MotifCallout[] = [
@@ -25,12 +26,14 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
     alt: 'Cypress Tree embroidery motif from Ramallah',
     label: 'Cypress Tree Ramallah',
     top: 'top-[8%]',
+    right: 'md:right-[calc(67.3vh+6px)]',
   },
   {
     src: '/brand/scene2/Sarwa%20%20Cypress%20Tree%20Hebron.png',
     alt: 'Sarwa Cypress Tree embroidery motif from Hebron',
     label: 'Cypress Tree Hebron',
     top: 'top-[62%]',
+    right: 'md:right-[calc(72.4vh+6px)]',
   },
 ]
 
@@ -40,7 +43,7 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
       {MOTIF_CALLOUTS.map((c) => (
         <div
           key={c.label}
-          className={`absolute left-3 md:left-auto md:right-[87.5vh] ${c.top} z-40 pointer-events-none transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="flex items-center">
             <div className="flex flex-col items-center">
@@ -54,7 +57,7 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
                 {c.label}
               </p>
             </div>
-            <div aria-hidden="true" className="ml-3 hidden h-px w-[clamp(20px,3.5vw,64px)] bg-black md:block" />
+            <div aria-hidden="true" className="ml-1 hidden h-px w-2.5 bg-black md:block" />
           </div>
         </div>
       ))}
