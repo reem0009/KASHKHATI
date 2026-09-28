@@ -26,14 +26,14 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
     alt: 'Cypress Tree embroidery motif from Ramallah',
     label: 'Cypress Tree Ramallah',
     top: 'top-[8%]',
-    right: 'md:right-[calc(67.3vh+50px)]',
+    right: 'md:right-[calc(67.3vh+32px)]',
   },
   {
     src: '/brand/scene2/Sarwa%20%20Cypress%20Tree%20Hebron.png',
     alt: 'Sarwa Cypress Tree embroidery motif from Hebron',
     label: 'Cypress Tree Hebron',
     top: 'top-[62%]',
-    right: 'md:right-[calc(72.4vh+50px)]',
+    right: 'md:right-[calc(72.4vh+32px)]',
   },
 ]
 
@@ -60,7 +60,7 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
               width="40"
               height="1"
               shapeRendering="crispEdges"
-              className="absolute left-[calc(100%+5px)] top-1/2 -mt-[0.5px] hidden shrink-0 md:block"
+              className="absolute left-[calc(100%-13px)] top-1/2 -mt-[0.5px] hidden shrink-0 md:block"
             >
               <line x1="0" y1="0.5" x2="40" y2="0.5" stroke="#000" strokeWidth="1" />
             </svg>
