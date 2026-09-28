@@ -291,9 +291,15 @@ export const HomePage = () => {
     const measure = () => {
       const rect = track.getBoundingClientRect()
       const total = track.offsetHeight - window.innerHeight
+      // Hold zone: extra pinned distance after the animation completes so the
+      // finished Scene 2 stays stationary ~1s before the sticky releases.
+      // Progress maps 0→1 over the animation distance only; the hold zone
+      // keeps progress at 1 while still pinned. Release is pure geometry.
+      const hold = window.innerHeight * 0.6
+      const anim = Math.max(1, total - hold)
       if (total <= 0) return scene2Done.current ? 1 : 0
       if (scene2Done.current) return 1
-      const p = Math.min(1, Math.max(0, -rect.top / total))
+      const p = Math.min(1, Math.max(0, -rect.top / anim))
       if (p >= 0.999) {
         scene2Done.current = true
         scheduleMotifs()
@@ -363,7 +369,7 @@ export const HomePage = () => {
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
       {/* HERO — Scene 1 → Scene 2 scroll sequence (pinned, translateX-only) */}
-      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '160vh' }}>
+      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '220vh' }}>
       <section
         ref={heroRef}
         className={reduced
