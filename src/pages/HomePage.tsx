@@ -17,6 +17,10 @@ export const HomePage = () => {
   const [lang] = useState<'en' | 'ar'>('en')
   const heroRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const scene1Ref = useRef<HTMLDivElement>(null)
+  const scene2Ref = useRef<HTMLDivElement>(null)
+  const scene2Done = useRef(false)
   const [revealState, setRevealState] = useState<HeroRevealState>(() =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
@@ -196,6 +200,68 @@ export const HomePage = () => {
     }
   }, [reduced, mx])
 
+  // Scene 1 → Scene 2: pinned, scroll-driven, translateX-only horizontal slide.
+  // Track is 250vh with a sticky 100vh viewport. Scroll progress 0→1 drives:
+  // Scene1 0 → +100vw (slides out right), Scene2 +100vw → 0 (slides in from right).
+  // No scaling, no layout-property animation — GPU-friendly translate3d on whole containers.
+  // One-way latch: once progress reaches 1 it stays (no reverse, no replay).
+  useEffect(() => {
+    if (reduced) return
+    const track = trackRef.current
+    const s1 = scene1Ref.current
+    const s2 = scene2Ref.current
+    if (!track || !s1 || !s2) return
+
+    let raf = 0
+    let current = 0
+
+    const apply = (p: number) => {
+      // translateX only — final sizes established in CSS (Scene2 img h-full w-auto)
+      s1.style.transform = `translate3d(${(p * 100).toFixed(3)}vw, 0, 0)`
+      s2.style.transform = `translate3d(${((1 - p) * 100).toFixed(3)}vw, 0, 0)`
+    }
+
+    const measure = () => {
+      const rect = track.getBoundingClientRect()
+      const total = track.offsetHeight - window.innerHeight
+      if (total <= 0) return scene2Done.current ? 1 : 0
+      if (scene2Done.current) return 1
+      const p = Math.min(1, Math.max(0, -rect.top / total))
+      if (p >= 0.999) {
+        scene2Done.current = true
+        return 1
+      }
+      return p
+    }
+
+    const update = () => {
+      raf = 0
+      const target = measure()
+      // Subtle interpolation for smoothness; snap when close. Still scroll-driven.
+      current += (target - current) * 0.22
+      if (Math.abs(target - current) < 0.001) current = target
+      apply(current)
+      if (current !== target && !scene2Done.current) {
+        raf = requestAnimationFrame(update)
+      }
+    }
+
+    const requestUpdate = () => {
+      if (!raf) raf = requestAnimationFrame(update)
+    }
+
+    apply(0)
+    requestUpdate()
+
+    window.addEventListener('scroll', requestUpdate, { passive: true })
+    window.addEventListener('resize', requestUpdate)
+    return () => {
+      if (raf) cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', requestUpdate)
+      window.removeEventListener('resize', requestUpdate)
+    }
+  }, [reduced])
+
   const completeReveal = () => {
     if (revealRef.current === 'completed') return
     if (lockTimer.current !== null) {
@@ -224,11 +290,18 @@ export const HomePage = () => {
       {/* Background Ambient Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
-      {/* HERO SECTION — Screenshot Reveal (Light Cream) */}
-      <section 
-        ref={heroRef} 
-        className="relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
+      {/* HERO — Scene 1 → Scene 2 scroll sequence (pinned, translateX-only) */}
+      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '250vh' }}>
+      <section
+        ref={heroRef}
+        className={reduced
+          ? "relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
+          : "sticky top-0 h-screen overflow-hidden z-10 bg-[#EDEBDE] text-black"}
       >
+        <div
+          ref={scene1Ref}
+          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center pb-16 will-change-transform"}
+        >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           {/* Wordmark + Star Lockup — section top-left */}
           <div className="flex items-center gap-2.5 mb-8">
@@ -342,7 +415,33 @@ export const HomePage = () => {
 
           </div>
         </div>
+        </div>
+        {!reduced && (
+          <div
+            ref={scene2Ref}
+            aria-hidden={false}
+            className="absolute inset-0 z-30 flex items-stretch justify-end will-change-transform pointer-events-none"
+            style={{ transform: 'translate3d(100vw, 0, 0)' }}
+          >
+            <img
+              src="/brand/scene2/torso-closeup.svg"
+              alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
+              draggable={false}
+              className="block h-full w-auto max-w-none object-contain"
+            />
+          </div>
+        )}
       </section>
+      {reduced && (
+        <section aria-label="Torso close-up" className="relative h-screen overflow-hidden bg-[#EDEBDE] flex items-stretch justify-end">
+          <img
+            src="/brand/scene2/torso-closeup.svg"
+            alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
+            className="block h-full w-auto max-w-none object-contain"
+          />
+        </section>
+      )}
+      </div>
 
       {/* PHILOSOPHY SECTION — Quiet Luxury & Restraint */}
       <section id="philosophy" className="py-24 bg-black/30 border-y border-white/10 relative overflow-hidden">
