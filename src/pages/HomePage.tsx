@@ -53,7 +53,7 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
                 draggable={false}
                 className="block h-[5.5vh] min-h-[36px] w-auto object-contain md:h-[6.5vh]"
               />
-              <p className="mt-2 whitespace-nowrap text-center font-body text-[10px] uppercase tracking-[0.18em] text-black md:text-[11px]">
+              <p className="mt-1 whitespace-nowrap text-center font-body text-[7px] uppercase tracking-[0.18em] text-black">
                 {c.label}
               </p>
             </div>
