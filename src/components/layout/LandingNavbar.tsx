@@ -66,12 +66,12 @@ export function LandingNavbar() {
           : 'border-b border-transparent bg-transparent',
       )}
     >
-      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-6 lg:px-8">
+      <nav className="mx-auto flex h-16 w-full max-w-7xl items-center justify-start px-6 lg:px-8">
         <a href="#top" aria-label="deheiyya home" onClick={() => setOpen(false)}>
           <BrandLockup />
         </a>
 
-        <div className="hidden items-center gap-8 md:flex">
+        <div className="hidden items-center gap-8 md:flex md:ml-12">
           {LINKS.map((l) => (
             <a
               key={l.href}
@@ -84,7 +84,7 @@ export function LandingNavbar() {
         </div>
 
         <button
-          className="p-2 md:hidden"
+          className="ml-auto p-2 md:hidden"
           aria-label={open ? 'Close menu' : 'Open menu'}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
