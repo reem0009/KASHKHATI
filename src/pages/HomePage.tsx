@@ -85,6 +85,7 @@ export const HomePage = () => {
   const scene2Done = useRef(false)
   const motifTimer = useRef<number | null>(null)
   const [motifsVisible, setMotifsVisible] = useState(false)
+  const [scene2Active, setScene2Active] = useState(false)
   const [revealState, setRevealState] = useState<HeroRevealState>(() =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
@@ -304,6 +305,7 @@ export const HomePage = () => {
       if (p >= 0.999) {
         scene2Done.current = true
         scheduleMotifs()
+        setScene2Active(true)
         return 1
       }
       return p
@@ -385,12 +387,21 @@ export const HomePage = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
             
-            {/* Left Copy — Screenshot Hero */}
+            {/* Left Copy — stationary cell, content crossfades Scene 1 ⇄ Scene 2.
+                Cell is positioned on desktop so the overlay fills it exactly;
+                on mobile the overlay anchors to the viewport instead. */}
+            <div
+              className={`lg:col-span-6 lg:relative self-center ${scene2Active ? 'pointer-events-none' : ''}`}
+            >
+            <div
+              aria-hidden={scene2Active}
+              className={`transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-0' : 'opacity-100'}`}
+            >
             <motion.div 
               initial={{ opacity: 0, y: 30 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} 
-              className="lg:col-span-6 text-center lg:text-start flex flex-col items-center lg:items-start self-center"
+              className="text-center lg:text-start flex flex-col items-center lg:items-start"
             >
               {/* Main Headline */}
               <h1 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
@@ -428,8 +439,39 @@ export const HomePage = () => {
                 <a href="#philosophy" onClick={completeReveal} className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
                 {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
               </a>
-              </div>
-            </motion.div>
+               </div>
+             </motion.div>
+             </div>
+             {/* Scene 2 Copy — same cell, fades in as one block when active.
+                 On mobile the closeup is full-bleed, so the copy sits in a
+                 cream sheet pinned to the bottom; on desktop it stays in place. */}
+             <div
+               aria-hidden={!scene2Active}
+               className={`absolute inset-0 z-40 lg:z-auto flex flex-col items-center justify-end text-center lg:justify-center lg:items-start lg:text-start transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+             >
+               <div className="flex w-full flex-col items-center bg-[#EDEBDE] px-6 pb-8 pt-6 lg:w-auto lg:items-start lg:bg-transparent lg:p-0">
+               <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
+                 Your culture is part<br />of your beauty.
+               </h2>
+               <p className="mt-6 text-base sm:text-lg text-black/70 max-w-xl font-light leading-relaxed">
+                 Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
+               </p>
+               <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
+                 {['CULTURE', 'TRADITION', 'STYLE', 'IDENTITY'].map((pill) => (
+                   <span
+                     key={pill}
+                     className="rounded-full border border-[#A50100] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#A50100]"
+                   >
+                     {pill}
+                   </span>
+                 ))}
+               </div>
+               <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-black/50">
+                 SAUDI · PALESTINIAN · KHALEEJI · MUSLIM ·
+               </p>
+               </div>
+             </div>
+             </div>
 
             {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
                 lg:absolute keeps the frame geometry identical to the previous full-hero
