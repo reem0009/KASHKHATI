@@ -45,19 +45,27 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
           key={c.label}
           className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
         >
-          <div className="flex items-center">
-            <div className="flex flex-col items-center">
-              <img
-                src={c.src}
-                alt={c.alt}
-                draggable={false}
-                className="block h-[5.5vh] min-h-[36px] w-auto object-contain md:h-[6.5vh]"
-              />
-              <p className="mt-1 whitespace-nowrap text-center font-body text-[7px] uppercase tracking-[0.18em] text-black">
+          <div className="flex flex-col items-start">
+            <img
+              src={c.src}
+              alt={c.alt}
+              draggable={false}
+              className="block h-[5.5vh] min-h-[36px] w-auto object-contain md:h-[6.5vh]"
+            />
+            <div className="mt-1 flex items-center">
+              <p className="whitespace-nowrap font-body text-[7px] uppercase tracking-[0.18em] text-black">
                 {c.label}
               </p>
+              <svg
+                aria-hidden="true"
+                width="40"
+                height="1"
+                shapeRendering="crispEdges"
+                className="ml-2 hidden shrink-0 md:block"
+              >
+                <line x1="0" y1="0.5" x2="40" y2="0.5" stroke="#000" strokeWidth="1" />
+              </svg>
             </div>
-            <div aria-hidden="true" className="ml-2 hidden h-px w-10 bg-black md:block" />
           </div>
         </div>
       ))}
