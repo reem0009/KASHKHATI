@@ -285,12 +285,12 @@ export const HomePage = () => {
   const t = (en: string, ar: string) => (lang === 'ar' ? ar : en)
 
   return (
-    <div className="w-full min-h-screen bg-black text-[#EDEBDE] selection:bg-[#A50100] selection:text-white font-body antialiased overflow-x-hidden">
+    <div className="w-full min-h-screen bg-black text-[#EDEBDE] selection:bg-[#A50100] selection:text-white font-body antialiased overflow-x-clip">
       {/* Background Ambient Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
       {/* HERO — Scene 1 → Scene 2 scroll sequence (pinned, translateX-only) */}
-      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '250vh' }}>
+      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '160vh' }}>
       <section
         ref={heroRef}
         className={reduced
