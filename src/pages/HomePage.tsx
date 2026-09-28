@@ -374,6 +374,7 @@ export const HomePage = () => {
       <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '220vh' }}>
       <section
         ref={heroRef}
+        id="hero-sequence"
         className={reduced
           ? "relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
           : "sticky top-0 h-screen overflow-hidden z-10 bg-[#EDEBDE] text-black"}

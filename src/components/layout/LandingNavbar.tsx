@@ -44,7 +44,16 @@ export function LandingNavbar() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.7)
+    // Show the cream bar once Scene 2 is halfway out of view: the hero
+    // section's top has scrolled half a viewport past the top edge.
+    const onScroll = () => {
+      const hero = document.getElementById('hero-sequence')
+      if (!hero) {
+        setScrolled(window.scrollY > window.innerHeight * 0.7)
+        return
+      }
+      setScrolled(hero.getBoundingClientRect().top <= -window.innerHeight * 0.5)
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
