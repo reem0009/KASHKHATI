@@ -4,6 +4,7 @@ import { animate, motion, useMotionValue } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
+import { LandingNavbar } from '../components/layout/LandingNavbar'
 import { cn } from '../lib/utils'
 
 type HeroRevealState = 'notStarted' | 'inProgress' | 'completed'
@@ -364,7 +365,8 @@ export const HomePage = () => {
   const t = (en: string, ar: string) => (lang === 'ar' ? ar : en)
 
   return (
-    <div className="w-full min-h-screen bg-black text-[#EDEBDE] selection:bg-[#A50100] selection:text-white font-body antialiased overflow-x-clip">
+    <div id="top" className="w-full min-h-screen bg-black text-[#EDEBDE] selection:bg-[#A50100] selection:text-white font-body antialiased overflow-x-clip">
+      <LandingNavbar />
       {/* Background Ambient Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
