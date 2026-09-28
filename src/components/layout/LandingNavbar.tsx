@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
@@ -39,7 +38,6 @@ function BrandLockup() {
 }
 
 export function LandingNavbar() {
-  const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -85,15 +83,6 @@ export function LandingNavbar() {
           ))}
         </div>
 
-        <div className="hidden md:block">
-          <button
-            onClick={() => navigate('/quiz')}
-            className="rounded-[10px] bg-[#A50100] px-5 py-2.5 text-xs font-medium tracking-wider text-[#EDEBDE] shadow-[0_10px_30px_rgba(165,1,0,0.35)] transition-colors hover:bg-[#7d0100]"
-          >
-            BEGIN YOUR JOURNEY
-          </button>
-        </div>
-
         <button
           className="p-2 md:hidden"
           aria-label={open ? 'Close menu' : 'Open menu'}
@@ -119,12 +108,6 @@ export function LandingNavbar() {
                 {l.label}
               </a>
             ))}
-            <button
-              onClick={() => navigate('/quiz')}
-              className="mt-3 rounded-[10px] bg-[#A50100] px-5 py-3 text-xs font-medium tracking-wider text-[#EDEBDE]"
-            >
-              BEGIN YOUR JOURNEY
-            </button>
           </div>
         </div>
       )}
