@@ -18,7 +18,7 @@ export const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
-  const scene1Ref = useRef<HTMLDivElement>(null)
+  const scene1IllusRef = useRef<HTMLDivElement>(null)
   const scene2Ref = useRef<HTMLDivElement>(null)
   const scene2Done = useRef(false)
   const [revealState, setRevealState] = useState<HeroRevealState>(() =>
@@ -200,15 +200,14 @@ export const HomePage = () => {
     }
   }, [reduced, mx])
 
-  // Scene 1 → Scene 2: pinned, scroll-driven, translateX-only horizontal slide.
-  // Track is 250vh with a sticky 100vh viewport. Scroll progress 0→1 drives:
-  // Scene1 0 → +100vw (slides out right), Scene2 +100vw → 0 (slides in from right).
-  // No scaling, no layout-property animation — GPU-friendly translate3d on whole containers.
-  // One-way latch: once progress reaches 1 it stays (no reverse, no replay).
+  // Scene 1 illustration ⇄ Scene 2: pinned, scroll-driven, translateX-only.
+  // ONLY the right-side illustration group moves (Scene 1 wall/character/hand
+  // 0 → +100vw out right; Scene 2 +100vw → 0 in from right). Static hero
+  // content (logo, text, buttons) is never transformed. One-way latch.
   useEffect(() => {
     if (reduced) return
     const track = trackRef.current
-    const s1 = scene1Ref.current
+    const s1 = scene1IllusRef.current
     const s2 = scene2Ref.current
     if (!track || !s1 || !s2) return
 
@@ -299,8 +298,7 @@ export const HomePage = () => {
           : "sticky top-0 h-screen overflow-hidden z-10 bg-[#EDEBDE] text-black"}
       >
         <div
-          ref={scene1Ref}
-          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center pb-16 will-change-transform"}
+          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center pb-16"}
         >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           {/* Wordmark + Star Lockup — section top-left */}
@@ -373,9 +371,11 @@ export const HomePage = () => {
               </div>
             </motion.div>
 
-            {/* Right Reveal Frame — Static Wall, Staged Character Reveal */}
+            {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
+                lg:absolute keeps the frame geometry identical to the previous full-hero
+                offset box while the grid cell stays in flow on mobile. */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
-            <div className="lg:col-span-6 min-h-[480px]">
+            <div ref={scene1IllusRef} className="lg:col-span-6 min-h-[480px] lg:absolute lg:inset-0 will-change-transform">
                <div ref={frameRef} className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
                   {/* Character layer: stays behind the wall */}
                   <motion.div
