@@ -51,13 +51,13 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
                 src={c.src}
                 alt={c.alt}
                 draggable={false}
-                className="block h-[9vh] min-h-[56px] w-auto object-contain md:h-[11vh]"
+                className="block h-[5.5vh] min-h-[36px] w-auto object-contain md:h-[6.5vh]"
               />
               <p className="mt-2 whitespace-nowrap text-center font-body text-[10px] uppercase tracking-[0.18em] text-black md:text-[11px]">
                 {c.label}
               </p>
             </div>
-            <div aria-hidden="true" className="ml-1 hidden h-px w-2.5 bg-black md:block" />
+            <div aria-hidden="true" className="ml-2 hidden h-px w-10 bg-black md:block" />
           </div>
         </div>
       ))}
