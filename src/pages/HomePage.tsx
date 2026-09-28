@@ -10,6 +10,58 @@ type HeroRevealState = 'notStarted' | 'inProgress' | 'completed'
 
 const REVEAL_LOCK_MS = 900
 
+const MOTIF_FADE_DELAY_MS = 500
+
+type MotifCallout = {
+  src: string
+  alt: string
+  label: string
+  top: string
+}
+
+const MOTIF_CALLOUTS: MotifCallout[] = [
+  {
+    src: '/brand/scene2/Cypress%20Tree%20Ramallah.png',
+    alt: 'Cypress Tree embroidery motif from Ramallah',
+    label: 'Cypress Tree Ramallah',
+    top: 'top-[8%]',
+  },
+  {
+    src: '/brand/scene2/Sarwa%20%20Cypress%20Tree%20Hebron.png',
+    alt: 'Sarwa Cypress Tree embroidery motif from Hebron',
+    label: 'Cypress Tree Hebron',
+    top: 'top-[62%]',
+  },
+]
+
+function Scene2Callouts({ visible }: { visible: boolean }) {
+  return (
+    <>
+      {MOTIF_CALLOUTS.map((c) => (
+        <div
+          key={c.label}
+          className={`absolute left-3 md:left-auto md:right-[87.5vh] ${c.top} z-40 pointer-events-none transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
+        >
+          <div className="flex items-center">
+            <div className="flex flex-col items-center">
+              <img
+                src={c.src}
+                alt={c.alt}
+                draggable={false}
+                className="block h-[9vh] min-h-[56px] w-auto object-contain md:h-[11vh]"
+              />
+              <p className="mt-2 whitespace-nowrap text-center font-body text-[10px] uppercase tracking-[0.18em] text-black md:text-[11px]">
+                {c.label}
+              </p>
+            </div>
+            <div aria-hidden="true" className="ml-3 hidden h-px w-[clamp(20px,3.5vw,64px)] bg-black md:block" />
+          </div>
+        </div>
+      ))}
+    </>
+  )
+}
+
 export const HomePage = () => {
   const navigate = useNavigate()
   useLenis()
@@ -21,6 +73,8 @@ export const HomePage = () => {
   const scene1IllusRef = useRef<HTMLDivElement>(null)
   const scene2Ref = useRef<HTMLDivElement>(null)
   const scene2Done = useRef(false)
+  const motifTimer = useRef<number | null>(null)
+  const [motifsVisible, setMotifsVisible] = useState(false)
   const [revealState, setRevealState] = useState<HeroRevealState>(() =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
@@ -214,6 +268,11 @@ export const HomePage = () => {
     let raf = 0
     let current = 0
 
+    const scheduleMotifs = () => {
+      if (motifTimer.current !== null) return
+      motifTimer.current = window.setTimeout(() => setMotifsVisible(true), MOTIF_FADE_DELAY_MS)
+    }
+
     const apply = (p: number) => {
       // translateX only — final sizes established in CSS (Scene2 img h-full w-auto)
       s1.style.transform = `translate3d(${(p * 100).toFixed(3)}vw, 0, 0)`
@@ -228,6 +287,7 @@ export const HomePage = () => {
       const p = Math.min(1, Math.max(0, -rect.top / total))
       if (p >= 0.999) {
         scene2Done.current = true
+        scheduleMotifs()
         return 1
       }
       return p
@@ -256,6 +316,10 @@ export const HomePage = () => {
     window.addEventListener('resize', requestUpdate)
     return () => {
       if (raf) cancelAnimationFrame(raf)
+      if (motifTimer.current !== null) {
+        window.clearTimeout(motifTimer.current)
+        motifTimer.current = null
+      }
       window.removeEventListener('scroll', requestUpdate)
       window.removeEventListener('resize', requestUpdate)
     }
@@ -429,6 +493,7 @@ export const HomePage = () => {
               draggable={false}
               className="block h-full w-auto max-w-none object-contain"
             />
+            <Scene2Callouts visible={motifsVisible} />
           </div>
         )}
       </section>
@@ -439,6 +504,7 @@ export const HomePage = () => {
             alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
             className="block h-full w-auto max-w-none object-contain"
           />
+          <Scene2Callouts visible />
         </section>
       )}
       </div>
