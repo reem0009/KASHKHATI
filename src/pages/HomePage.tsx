@@ -26,14 +26,14 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
     alt: 'Cypress Tree embroidery motif from Ramallah',
     label: 'Cypress Tree Ramallah',
     top: 'top-[8%]',
-    right: 'md:right-[calc(67.3vh+6px)]',
+    right: 'md:right-[calc(67.3vh+50px)]',
   },
   {
     src: '/brand/scene2/Sarwa%20%20Cypress%20Tree%20Hebron.png',
     alt: 'Sarwa Cypress Tree embroidery motif from Hebron',
     label: 'Cypress Tree Hebron',
     top: 'top-[62%]',
-    right: 'md:right-[calc(72.4vh+6px)]',
+    right: 'md:right-[calc(72.4vh+50px)]',
   },
 ]
 
@@ -45,27 +45,25 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
           key={c.label}
           className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
         >
-          <div className="flex flex-col items-start">
+          <div className="relative flex flex-col items-center">
             <img
               src={c.src}
               alt={c.alt}
               draggable={false}
               className="block h-[5.5vh] min-h-[36px] w-auto object-contain md:h-[6.5vh]"
             />
-            <div className="mt-1 flex items-center">
-              <p className="whitespace-nowrap font-body text-[7px] uppercase tracking-[0.18em] text-black">
-                {c.label}
-              </p>
-              <svg
-                aria-hidden="true"
-                width="40"
-                height="1"
-                shapeRendering="crispEdges"
-                className="ml-2 hidden shrink-0 md:block"
-              >
-                <line x1="0" y1="0.5" x2="40" y2="0.5" stroke="#000" strokeWidth="1" />
-              </svg>
-            </div>
+            <p className="mt-1 whitespace-nowrap text-center font-body text-[7px] uppercase tracking-[0.18em] text-black">
+              {c.label}
+            </p>
+            <svg
+              aria-hidden="true"
+              width="40"
+              height="1"
+              shapeRendering="crispEdges"
+              className="absolute left-[calc(100%+5px)] top-1/2 -mt-[0.5px] hidden shrink-0 md:block"
+            >
+              <line x1="0" y1="0.5" x2="40" y2="0.5" stroke="#000" strokeWidth="1" />
+            </svg>
           </div>
         </div>
       ))}
