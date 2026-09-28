@@ -382,28 +382,6 @@ export const HomePage = () => {
           className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center pb-16"}
         >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-          {/* Wordmark + Star Lockup — section top-left */}
-          <div className="flex items-center gap-2.5 mb-8">
-            <img 
-              src="/brand/logo/logolightmode.svg" 
-              alt="deheiyya star mark" 
-                  className="h-[46px] w-[46px] object-contain shrink-0" 
-            />
-                <div className="flex flex-col justify-center">
-                  <img 
-                    src="/brand/wordmark/wordmarkblack.svg" 
-                    alt="deheiyya" 
-                    className="h-auto w-[171.3%] max-w-none -ml-[35.3%] -mr-[36%] object-contain shrink-0" 
-                  />
-                  <div className="-mt-[18px] flex w-fit items-center justify-between gap-[0.35em] text-[13px] tracking-[0.07em] text-black/60">
-                    <span className="whitespace-nowrap">CULTURE</span>
-                    <span className="text-[10px] text-[#A50100]">✦</span>
-                    <span className="whitespace-nowrap">SELF-EXPRESSION</span>
-                    <span className="text-[10px] text-[#A50100]">✦</span>
-                    <span className="whitespace-nowrap">YOU</span>
-                  </div>
-                </div>
-          </div>
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
             
             {/* Left Copy — Screenshot Hero */}
