@@ -38,36 +38,13 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
   },
 ]
 
-// REVERSIBLE mobile legend: to remove it later, delete this component, its
-// single usage inside the Scene 2 copy sheet, and the hideOnMobile prop
-// (component signature + animated-overlay usage) to restore overlay callouts.
-function Scene2MobileLegend() {
-  return (
-    <div className="mb-5 flex items-start justify-center gap-8 md:hidden">
-      {MOTIF_CALLOUTS.map((c) => (
-        <div key={c.label} className="flex flex-col items-center">
-          <img
-            src={c.src}
-            alt={c.alt}
-            draggable={false}
-            className="block h-10 w-auto object-contain"
-          />
-          <p className="mt-1 whitespace-nowrap text-center font-body text-[7px] uppercase tracking-[0.18em] text-black">
-            {c.label}
-          </p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function Scene2Callouts({ visible, hideOnMobile = false }: { visible: boolean; hideOnMobile?: boolean }) {
+function Scene2Callouts({ visible }: { visible: boolean }) {
   return (
     <>
       {MOTIF_CALLOUTS.map((c) => (
         <div
           key={c.label}
-          className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none transition-opacity duration-500 ease-out ${hideOnMobile ? 'hidden md:block' : ''} ${visible ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none hidden md:block transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="relative flex flex-col items-center">
             <img
@@ -473,7 +450,6 @@ export const HomePage = () => {
                className={`absolute inset-0 z-40 lg:z-auto flex flex-col items-center justify-end text-center lg:justify-center lg:items-start lg:text-start transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
              >
                <div className="flex w-full flex-col items-center bg-[#EDEBDE] px-6 pb-8 pt-6 lg:w-auto lg:items-start lg:bg-transparent lg:p-0">
-               <Scene2MobileLegend />
                <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
                  Your culture is part<br />of your beauty.
                </h2>
@@ -555,7 +531,7 @@ export const HomePage = () => {
               draggable={false}
               className="block h-full w-auto max-w-none object-contain"
             />
-            <Scene2Callouts visible={motifsVisible} hideOnMobile />
+            <Scene2Callouts visible={motifsVisible} />
           </div>
         )}
       </section>
