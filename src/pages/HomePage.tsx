@@ -525,7 +525,9 @@ export const HomePage = () => {
                 button sizes + max-lg:gap-6 grid above, (4) frame height +
                 character offset below, (5) reveal factor in the setHidden
                 effect (0.25 under 1024px), (6) px-based slide offsets in
-                apply() + 200vw initial fallback + s2 img load listener.
+                apply() + 200vw initial fallback + s2 img load listener,
+                (7) wall/hand max-lg:right-[40px] to close the mobile girl-wall
+                gap (REVERSIBLE mobile composition fix).
                 To reverse, delete each max-lg: class listed here and restore
                 0.15 in setHidden, vw offsets in apply(), and 100vw fallback. */}
             {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
@@ -550,11 +552,11 @@ export const HomePage = () => {
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
-                    className="absolute right-0 top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
+                    className="absolute right-0 max-lg:right-[40px] top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
                   {/* Hand layer: above the wall so the fingers show */}
                   {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
-                  <div className="absolute right-0 top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
+                  <div className="absolute right-0 max-lg:right-[40px] top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
                     {/* Hand: full.svg-mapped size/position, fingertips over the wall edge */}
                     <motion.img
                       src="/brand/hero/hero-hand.svg"
