@@ -38,6 +38,34 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
   },
 ]
 
+// Shared Scene 2 copy (desktop overlay + mobile static section render this;
+// positioning wrappers stay at each usage site).
+function Scene2CopyContent() {
+  return (
+    <>
+      <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
+        Your culture is part<br />of your beauty.
+      </h2>
+      <p className="mt-6 max-lg:mt-4 text-base sm:text-lg max-lg:text-sm text-black/70 max-w-xl font-light leading-relaxed">
+        Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
+      </p>
+      <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
+        {['CULTURE', 'TRADITION', 'STYLE', 'IDENTITY'].map((pill) => (
+          <span
+            key={pill}
+            className="rounded-full border border-[#A50100] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#A50100]"
+          >
+            {pill}
+          </span>
+        ))}
+      </div>
+      <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-black/50">
+        SAUDI · PALESTINIAN · KHALEEJI · MUSLIM ·
+      </p>
+    </>
+  )
+}
+
 function Scene2Callouts({ visible }: { visible: boolean }) {
   return (
     <>
@@ -494,25 +522,7 @@ export const HomePage = () => {
                 className={`absolute inset-0 z-40 lg:z-auto hidden lg:flex flex-col items-center justify-end text-center lg:justify-center lg:items-start lg:text-start transition-opacity duration-500 ease-out ${showScene2 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
               >
                <div className="flex w-full flex-col items-center bg-[#EDEBDE] px-6 pb-8 pt-6 lg:w-auto lg:items-start lg:bg-transparent lg:p-0">
-               <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
-                 Your culture is part<br />of your beauty.
-               </h2>
-              <p className="mt-6 max-lg:mt-4 text-base sm:text-lg max-lg:text-sm text-black/70 max-w-xl font-light leading-relaxed">
-                 Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
-               </p>
-               <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
-                 {['CULTURE', 'TRADITION', 'STYLE', 'IDENTITY'].map((pill) => (
-                   <span
-                     key={pill}
-                     className="rounded-full border border-[#A50100] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#A50100]"
-                   >
-                     {pill}
-                   </span>
-                 ))}
-               </div>
-               <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-black/50">
-                 SAUDI · PALESTINIAN · KHALEEJI · MUSLIM ·
-               </p>
+               <Scene2CopyContent />
                </div>
              </div>
              </div>
@@ -526,8 +536,8 @@ export const HomePage = () => {
                 character offset below, (5) reveal factor in the setHidden
                 effect (0.25 under 1024px), (6) px-based slide offsets in
                 apply() + 200vw initial fallback + s2 img load listener,
-                (7) wall/hand max-lg:right-[40px] to close the mobile girl-wall
-                gap (REVERSIBLE mobile composition fix).
+                (7) wall/hand max-lg:right-[15%] to close the mobile girl-wall
+                gap using painted edges (REVERSIBLE mobile composition fix).
                 To reverse, delete each max-lg: class listed here and restore
                 0.15 in setHidden, vw offsets in apply(), and 100vw fallback. */}
             {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
@@ -552,11 +562,11 @@ export const HomePage = () => {
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
-                    className="absolute right-0 max-lg:right-[40px] top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
+                    className="absolute right-0 max-lg:right-[15%] top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
                   {/* Hand layer: above the wall so the fingers show */}
                   {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
-                  <div className="absolute right-0 max-lg:right-[40px] top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
+                  <div className="absolute right-0 max-lg:right-[15%] top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
                     {/* Hand: full.svg-mapped size/position, fingertips over the wall edge */}
                     <motion.img
                       src="/brand/hero/hero-hand.svg"
@@ -603,6 +613,23 @@ export const HomePage = () => {
         </section>
       )}
       </div>
+      {/* Mobile static Scene 2: same closeup + copy in normal flow (no animation).
+          REVERSIBLE with the mobile static hero — delete this block to remove. */}
+      {isMobile && !reduced && (
+        <section aria-label="Close-up" className="relative overflow-hidden bg-[#EDEBDE] text-black">
+          <div className="flex h-[70vh] justify-end overflow-hidden">
+            <img
+              src="/brand/scene2/torso-closeup.svg"
+              alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
+              draggable={false}
+              className="block h-full w-auto max-w-none object-contain"
+            />
+          </div>
+          <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 pb-12 pt-8 text-center">
+            <Scene2CopyContent />
+          </div>
+        </section>
+      )}
 
       {/* PHILOSOPHY SECTION — Quiet Luxury & Restraint */}
       <section id="philosophy" className="py-24 bg-black/30 border-y border-white/10 relative overflow-hidden">
