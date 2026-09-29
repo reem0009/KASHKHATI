@@ -101,7 +101,9 @@ export const HomePage = () => {
     if (reduced) return
     const setHidden = () => {
       if (revealRef.current !== 'notStarted') return
-      mx.set(0.15 * (frameRef.current?.clientWidth ?? 0))
+      // REVERSIBLE (mobile Scene 1 fix): wider reveal travel on narrow frames.
+      const narrow = window.innerWidth < 1024
+      mx.set((narrow ? 0.25 : 0.15) * (frameRef.current?.clientWidth ?? 0))
     }
     setHidden()
     window.addEventListener('resize', setHidden)
@@ -285,9 +287,14 @@ export const HomePage = () => {
     }
 
     const apply = (p: number) => {
-      // translateX only — final sizes established in CSS (Scene2 img h-full w-auto)
-      s1.style.transform = `translate3d(${(p * 100).toFixed(3)}vw, 0, 0)`
-      s2.style.transform = `translate3d(${((1 - p) * 100).toFixed(3)}vw, 0, 0)`
+      // translateX only — final sizes established in CSS (Scene2 img h-full w-auto).
+      // Offset is px-based: on narrow screens the fitted closeup is wider than
+      // the viewport, so 100vw would leave it peeking into view.
+      const vw = window.innerWidth
+      const imgW = s2.querySelector('img')?.clientWidth ?? 0
+      const off = Math.max(vw, imgW)
+      s1.style.transform = `translate3d(${(p * off).toFixed(1)}px, 0, 0)`
+      s2.style.transform = `translate3d(${((1 - p) * off).toFixed(1)}px, 0, 0)`
     }
 
     const measure = () => {
@@ -330,10 +337,15 @@ export const HomePage = () => {
     apply(0)
     requestUpdate()
 
+    // Recompute offsets once artwork dimensions are known.
+    const s2img = s2.querySelector('img')
+    s2img?.addEventListener('load', requestUpdate)
+
     window.addEventListener('scroll', requestUpdate, { passive: true })
     window.addEventListener('resize', requestUpdate)
     return () => {
       if (raf) cancelAnimationFrame(raf)
+      s2img?.removeEventListener('load', requestUpdate)
       if (motifTimer.current !== null) {
         window.clearTimeout(motifTimer.current)
         motifTimer.current = null
@@ -379,13 +391,13 @@ export const HomePage = () => {
         id="hero-sequence"
         className={reduced
           ? "relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
-          : "sticky top-0 h-screen overflow-hidden z-10 bg-[#EDEBDE] text-black"}
+          : "sticky top-0 h-screen max-lg:h-[100dvh] overflow-hidden z-10 bg-[#EDEBDE] text-black"}
       >
         <div
-          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center pb-16"}
+          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center max-lg:justify-start pb-16 max-lg:pb-8 max-lg:pt-16"}
         >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-stretch">
+          <div className="grid lg:grid-cols-12 gap-12 max-lg:gap-6 lg:gap-8 items-stretch">
             
             {/* Left Copy — stationary cell, content crossfades Scene 1 ⇄ Scene 2.
                 Cell is positioned on desktop so the overlay fills it exactly;
@@ -404,7 +416,7 @@ export const HomePage = () => {
               className="text-center lg:text-start flex flex-col items-center lg:items-start"
             >
               {/* Main Headline */}
-              <h1 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
+              <h1 className="text-4xl sm:text-6xl max-lg:text-[30px] max-lg:leading-[1.12] font-display font-light tracking-tight leading-[1.08] text-black">
                 {t('You were never meant to look like everyone else.', 'لم تُخلقي لتشبهي الجميع.')}
               </h1>
 
@@ -416,12 +428,12 @@ export const HomePage = () => {
               </p>
 
               {/* CTA */}
-              <div className="mt-10">
+              <div className="mt-10 max-lg:mt-6">
                 <motion.button
                   onClick={() => navigate('/quiz')}
                   whileHover={reduced ? undefined : { scale: 1.02 }}
                   whileTap={reduced ? undefined : { scale: 0.98 }}
-                  className="px-8 py-4 rounded-[10px] bg-[#A50100] text-[#EDEBDE] font-medium text-sm tracking-wider shadow-[0_10px_30px_rgba(165,1,0,0.35)] hover:bg-[#7d0100] transition-colors flex items-center justify-center gap-3 group"
+                  className="px-8 py-4 max-lg:px-6 max-lg:py-3 rounded-[10px] bg-[#A50100] text-[#EDEBDE] font-medium text-sm tracking-wider shadow-[0_10px_30px_rgba(165,1,0,0.35)] hover:bg-[#7d0100] transition-colors flex items-center justify-center gap-3 group"
                 >
                   <span>{t('BEGIN YOUR JOURNEY', 'ابدئي رحلتكِ')}</span>
                   <ArrowRight className={cn("w-4 h-4 transition-transform group-hover:translate-x-1", lang === 'ar' && "rotate-180 group-hover:-translate-x-1")} />
@@ -429,7 +441,7 @@ export const HomePage = () => {
               </div>
 
               {/* Scroll Cue */}
-              <div className="mt-14 flex w-fit flex-col items-center lg:items-start">
+              <div className="mt-14 max-lg:mt-8 flex w-fit flex-col items-center lg:items-start">
                 <img
                   src="/brand/dividers/dividersmall.svg"
                   alt=""
@@ -453,7 +465,7 @@ export const HomePage = () => {
                <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
                  Your culture is part<br />of your beauty.
                </h2>
-               <p className="mt-6 text-base sm:text-lg text-black/70 max-w-xl font-light leading-relaxed">
+              <p className="mt-6 max-lg:mt-4 text-base sm:text-lg max-lg:text-sm text-black/70 max-w-xl font-light leading-relaxed">
                  Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
                </p>
                <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
@@ -473,12 +485,23 @@ export const HomePage = () => {
              </div>
              </div>
 
+            {/* REVERSIBLE mobile Scene 1 fix: mobile-only overrides so the girl
+                reveals correctly on narrow frames and the hero fits small
+                viewports. Touchpoints: (1) max-lg:h-[100dvh] on the sticky
+                section above, (2) max-lg wrapper anchoring/spacing above,
+                (3) max-lg:mt-6 CTA + max-lg:mt-8 scroll cue + max-lg text and
+                button sizes + max-lg:gap-6 grid above, (4) frame height +
+                character offset below, (5) reveal factor in the setHidden
+                effect (0.25 under 1024px), (6) px-based slide offsets in
+                apply() + 200vw initial fallback + s2 img load listener.
+                To reverse, delete each max-lg: class listed here and restore
+                0.15 in setHidden, vw offsets in apply(), and 100vw fallback. */}
             {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
                 lg:absolute keeps the frame geometry identical to the previous full-hero
                 offset box while the grid cell stays in flow on mobile. */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
-            <div ref={scene1IllusRef} className="lg:col-span-6 min-h-[480px] lg:absolute lg:inset-0 will-change-transform">
-               <div ref={frameRef} className="relative h-[70vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
+            <div ref={scene1IllusRef} className="lg:col-span-6 min-h-[480px] max-lg:min-h-0 lg:absolute lg:inset-0 will-change-transform">
+               <div ref={frameRef} className="relative h-[70vh] max-lg:h-[42vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
                   {/* Character layer: stays behind the wall */}
                   <motion.div
                     className="absolute inset-0"
@@ -488,7 +511,7 @@ export const HomePage = () => {
                     <img
                       src="/brand/hero/hero-character-profile.svg"
                       alt="Woman in black abaya with red embroidered trim peeking from behind a wall"
-                      className="absolute bottom-[-3%] left-[10%] z-10 h-[105%] w-auto max-w-none object-contain"
+                      className="absolute bottom-[-3%] left-[10%] max-lg:left-[26%] z-10 h-[105%] w-auto max-w-none object-contain"
                     />
                   </motion.div>
                   {/* Wall: static, utmost right, full height */}
@@ -523,7 +546,7 @@ export const HomePage = () => {
             ref={scene2Ref}
             aria-hidden={false}
             className="absolute inset-0 z-30 flex items-stretch justify-end will-change-transform pointer-events-none"
-            style={{ transform: 'translate3d(100vw, 0, 0)' }}
+            style={{ transform: 'translate3d(200vw, 0, 0)' }}
           >
             <img
               src="/brand/scene2/torso-closeup.svg"
