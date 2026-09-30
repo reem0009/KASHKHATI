@@ -44,7 +44,7 @@ function Scene2Callouts({ visible }: { visible: boolean }) {
       {MOTIF_CALLOUTS.map((c) => (
         <div
           key={c.label}
-          className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none hidden md:block transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none hidden lg:block transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
         >
           <div className="relative flex flex-col items-center">
             <img
