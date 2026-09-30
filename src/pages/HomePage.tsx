@@ -38,34 +38,6 @@ const MOTIF_CALLOUTS: MotifCallout[] = [
   },
 ]
 
-// Shared Scene 2 copy (desktop overlay + mobile static section render this;
-// positioning wrappers stay at each usage site).
-function Scene2CopyContent() {
-  return (
-    <>
-      <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
-        Your culture is part<br />of your beauty.
-      </h2>
-      <p className="mt-6 max-lg:mt-4 text-base sm:text-lg max-lg:text-sm text-black/70 max-w-xl font-light leading-relaxed">
-        Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
-      </p>
-      <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
-        {['CULTURE', 'TRADITION', 'STYLE', 'IDENTITY'].map((pill) => (
-          <span
-            key={pill}
-            className="rounded-full border border-[#A50100] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#A50100]"
-          >
-            {pill}
-          </span>
-        ))}
-      </div>
-      <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-black/50">
-        SAUDI · PALESTINIAN · KHALEEJI · MUSLIM ·
-      </p>
-    </>
-  )
-}
-
 function Scene2Callouts({ visible }: { visible: boolean }) {
   return (
     <>
@@ -110,19 +82,6 @@ export const HomePage = () => {
   const trackRef = useRef<HTMLDivElement>(null)
   const scene1IllusRef = useRef<HTMLDivElement>(null)
   const scene2Ref = useRef<HTMLDivElement>(null)
-  // REVERSIBLE mobile static hero: below-1024px renders Scene 1 fully static
-  // (no sticky track, no scroll animation, final revealed composition on load).
-  // Touchpoints: (1) isMobile hook below, (2) revealState initializer +
-  // reveal effects honoring isMobile, (3) scroll-driven effect early return
-  // with transform cleanup, (4) track/section/wrapper classes keyed on
-  // isMobile, (5) Scene 2 overlay + copy hidden on mobile via showScene2.
-  // To reverse, delete the hook and replace each isMobile use with false.
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== 'undefined' &&
-      typeof window.matchMedia === 'function' &&
-      window.matchMedia('(max-width: 1023px)').matches,
-  )
   const scene2Done = useRef(false)
   const motifTimer = useRef<number | null>(null)
   const [motifsVisible, setMotifsVisible] = useState(false)
@@ -130,8 +89,7 @@ export const HomePage = () => {
   const [revealState, setRevealState] = useState<HeroRevealState>(() =>
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
-    (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-      window.matchMedia('(max-width: 1023px)').matches)
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
       ? 'completed'
       : 'notStarted',
   )
@@ -157,21 +115,14 @@ export const HomePage = () => {
   }, [revealState])
 
   useEffect(() => {
-    const m = window.matchMedia('(max-width: 1023px)')
-    const handler = () => setIsMobile(m.matches)
-    m.addEventListener('change', handler)
-    return () => m.removeEventListener('change', handler)
-  }, [])
-
-  useEffect(() => {
-    if ((reduced || isMobile) && revealRef.current === 'notStarted') {
+    if (reduced && revealRef.current === 'notStarted') {
       revealRef.current = 'completed'
       setRevealState('completed')
     }
-  }, [reduced, isMobile])
+  }, [reduced])
 
   useEffect(() => {
-    if (reduced || isMobile) return
+    if (reduced) return
 
     const getLenis = () =>
       (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis
@@ -314,21 +265,14 @@ export const HomePage = () => {
       window.removeEventListener('keydown', onKeyDown, { capture: true })
       window.removeEventListener('scroll', onScroll)
     }
-  }, [reduced, isMobile, mx])
+  }, [reduced, mx])
 
   // Scene 1 illustration ⇄ Scene 2: pinned, scroll-driven, translateX-only.
   // ONLY the right-side illustration group moves (Scene 1 wall/character/hand
   // 0 → +100vw out right; Scene 2 +100vw → 0 in from right). Static hero
   // content (logo, text, buttons) is never transformed. One-way latch.
   useEffect(() => {
-    if (reduced || isMobile) {
-      // Static mobile hero: clear any leftover scroll transforms (e.g. after resize).
-      const s1 = scene1IllusRef.current
-      const s2 = scene2Ref.current
-      if (s1) s1.style.transform = ''
-      if (s2) s2.style.transform = ''
-      return
-    }
+    if (reduced) return
     const track = trackRef.current
     const s1 = scene1IllusRef.current
     const s2 = scene2Ref.current
@@ -409,7 +353,7 @@ export const HomePage = () => {
       window.removeEventListener('scroll', requestUpdate)
       window.removeEventListener('resize', requestUpdate)
     }
-  }, [reduced, isMobile])
+  }, [reduced])
 
   const completeReveal = () => {
     if (revealRef.current === 'completed') return
@@ -426,8 +370,6 @@ export const HomePage = () => {
   }
 
   const revealed = revealState !== 'notStarted'
-  // Scene 2 copy is desktop-only; mobile stays on static Scene 1.
-  const showScene2 = scene2Active && !isMobile
 
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
@@ -443,18 +385,16 @@ export const HomePage = () => {
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
       {/* HERO — Scene 1 → Scene 2 scroll sequence (pinned, translateX-only) */}
-      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced || isMobile ? undefined : { height: '220vh' }}>
+      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '220vh' }}>
       <section
         ref={heroRef}
         id="hero-sequence"
         className={reduced
           ? "relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
-          : isMobile
-            ? "relative overflow-hidden z-10 bg-[#EDEBDE] text-black"
-            : "sticky top-0 h-screen max-lg:h-[100dvh] overflow-hidden z-10 bg-[#EDEBDE] text-black"}
+          : "sticky top-0 h-screen max-lg:h-[100dvh] overflow-hidden z-10 bg-[#EDEBDE] text-black"}
       >
         <div
-          className={reduced ? "w-full" : isMobile ? "w-full pt-20 pb-12" : "absolute inset-0 flex items-center justify-center max-lg:justify-start pb-16 max-lg:pb-8 max-lg:pt-16"}
+          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center max-lg:justify-start pb-16 max-lg:pb-8 max-lg:pt-16"}
         >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-12 gap-12 max-lg:gap-6 lg:gap-8 items-stretch">
@@ -463,14 +403,14 @@ export const HomePage = () => {
                 Cell is positioned on desktop so the overlay fills it exactly;
                 on mobile the overlay anchors to the viewport instead. */}
             <div
-              className={`lg:col-span-6 lg:relative self-center ${showScene2 ? 'pointer-events-none' : ''}`}
+              className={`lg:col-span-6 lg:relative self-center ${scene2Active ? 'pointer-events-none' : ''}`}
             >
             <div
-              aria-hidden={showScene2}
-              className={`transition-opacity duration-500 ease-out ${showScene2 ? 'opacity-0' : 'opacity-100'}`}
+              aria-hidden={scene2Active}
+              className={`transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-0' : 'opacity-100'}`}
             >
             <motion.div 
-              initial={reduced || isMobile ? false : { opacity: 0, y: 30 }} 
+              initial={{ opacity: 0, y: 30 }} 
               animate={{ opacity: 1, y: 0 }} 
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }} 
               className="text-center lg:text-start flex flex-col items-center lg:items-start"
@@ -517,12 +457,30 @@ export const HomePage = () => {
              {/* Scene 2 Copy — same cell, fades in as one block when active.
                  On mobile the closeup is full-bleed, so the copy sits in a
                  cream sheet pinned to the bottom; on desktop it stays in place. */}
-              <div
-                aria-hidden={!showScene2}
-                className={`absolute inset-0 z-40 lg:z-auto hidden lg:flex flex-col items-center justify-end text-center lg:justify-center lg:items-start lg:text-start transition-opacity duration-500 ease-out ${showScene2 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-              >
+             <div
+               aria-hidden={!scene2Active}
+               className={`absolute inset-0 z-40 lg:z-auto flex flex-col items-center justify-end text-center lg:justify-center lg:items-start lg:text-start transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+             >
                <div className="flex w-full flex-col items-center bg-[#EDEBDE] px-6 pb-8 pt-6 lg:w-auto lg:items-start lg:bg-transparent lg:p-0">
-               <Scene2CopyContent />
+               <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
+                 Your culture is part<br />of your beauty.
+               </h2>
+              <p className="mt-6 max-lg:mt-4 text-base sm:text-lg max-lg:text-sm text-black/70 max-w-xl font-light leading-relaxed">
+                 Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
+               </p>
+               <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
+                 {['CULTURE', 'TRADITION', 'STYLE', 'IDENTITY'].map((pill) => (
+                   <span
+                     key={pill}
+                     className="rounded-full border border-[#A50100] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#A50100]"
+                   >
+                     {pill}
+                   </span>
+                 ))}
+               </div>
+               <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-black/50">
+                 SAUDI · PALESTINIAN · KHALEEJI · MUSLIM ·
+               </p>
                </div>
              </div>
              </div>
@@ -535,9 +493,7 @@ export const HomePage = () => {
                 button sizes + max-lg:gap-6 grid above, (4) frame height +
                 character offset below, (5) reveal factor in the setHidden
                 effect (0.25 under 1024px), (6) px-based slide offsets in
-                apply() + 200vw initial fallback + s2 img load listener,
-                (7) wall/hand max-lg:right-[15%] to close the mobile girl-wall
-                gap using painted edges (REVERSIBLE mobile composition fix).
+                apply() + 200vw initial fallback + s2 img load listener.
                 To reverse, delete each max-lg: class listed here and restore
                 0.15 in setHidden, vw offsets in apply(), and 100vw fallback. */}
             {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
@@ -562,18 +518,18 @@ export const HomePage = () => {
                   <img 
                     src="/brand/hero/hero-wall.svg" 
                     alt="Beige wall panel" 
-                    className="absolute right-0 max-lg:right-[15%] top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
+                    className="absolute right-0 top-[-25%] z-20 h-[150%] w-auto object-contain pointer-events-none" 
                   />
                   {/* Hand layer: above the wall so the fingers show */}
                   {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
-                  <div className="absolute right-0 max-lg:right-[15%] top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
+                  <div className="absolute right-0 top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
                     {/* Hand: full.svg-mapped size/position, fingertips over the wall edge */}
                     <motion.img
                       src="/brand/hero/hero-hand.svg"
                       alt=""
                       aria-hidden="true"
                       style={{ x: mx }}
-                      initial={reduced || isMobile ? false : { opacity: 0 }}
+                      initial={reduced ? false : { opacity: 0 }}
                       animate={{ opacity: reduced || revealed ? 1 : 0 }}
                         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute left-[-14.7%] top-[66.1%] z-30 h-[32.9%] w-auto max-w-none object-contain pointer-events-none"
@@ -585,7 +541,7 @@ export const HomePage = () => {
           </div>
         </div>
         </div>
-        {!reduced && !isMobile && (
+        {!reduced && (
           <div
             ref={scene2Ref}
             aria-hidden={false}
@@ -613,23 +569,6 @@ export const HomePage = () => {
         </section>
       )}
       </div>
-      {/* Mobile static Scene 2: same closeup + copy in normal flow (no animation).
-          REVERSIBLE with the mobile static hero — delete this block to remove. */}
-      {isMobile && !reduced && (
-        <section aria-label="Close-up" className="relative overflow-hidden bg-[#EDEBDE] text-black">
-          <div className="flex h-[70vh] justify-end overflow-hidden">
-            <img
-              src="/brand/scene2/torso-closeup.svg"
-              alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
-              draggable={false}
-              className="block h-full w-auto max-w-none object-contain"
-            />
-          </div>
-          <div className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 pb-12 pt-8 text-center">
-            <Scene2CopyContent />
-          </div>
-        </section>
-      )}
 
       {/* PHILOSOPHY SECTION — Quiet Luxury & Restraint */}
       <section id="philosophy" className="py-24 bg-black/30 border-y border-white/10 relative overflow-hidden">
