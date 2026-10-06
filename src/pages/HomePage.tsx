@@ -1,375 +1,17 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { animate, motion, useMotionValue } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { LandingNavbar } from '../components/layout/LandingNavbar'
 import { cn } from '../lib/utils'
 
-type HeroRevealState = 'notStarted' | 'inProgress' | 'completed'
-
-const REVEAL_LOCK_MS = 900
-
-const MOTIF_FADE_DELAY_MS = 500
-
-type MotifCallout = {
-  src: string
-  alt: string
-  label: string
-  top: string
-  right: string
-}
-
-const MOTIF_CALLOUTS: MotifCallout[] = [
-  {
-    src: '/brand/scene2/Cypress%20Tree%20Ramallah.png',
-    alt: 'Cypress Tree embroidery motif from Ramallah',
-    label: 'Cypress Tree Ramallah',
-    top: 'top-[8%]',
-    right: 'md:right-[calc(67.3vh+32px)]',
-  },
-  {
-    src: '/brand/scene2/Sarwa%20%20Cypress%20Tree%20Hebron.png',
-    alt: 'Sarwa Cypress Tree embroidery motif from Hebron',
-    label: 'Cypress Tree Hebron',
-    top: 'top-[calc(52%-20px)]',
-    right: 'md:right-[calc(72.4vh+32px)]',
-  },
-]
-
-function Scene2Callouts({ visible }: { visible: boolean }) {
-  return (
-    <>
-      {MOTIF_CALLOUTS.map((c) => (
-        <div
-          key={c.label}
-          className={`absolute left-3 md:left-auto ${c.right} ${c.top} z-40 pointer-events-none hidden lg:block transition-opacity duration-500 ease-out ${visible ? 'opacity-100' : 'opacity-0'}`}
-        >
-          <div className="relative flex flex-col items-center">
-            <img
-              src={c.src}
-              alt={c.alt}
-              draggable={false}
-              className="block h-[5.5vh] min-h-[36px] w-auto object-contain md:h-[6.5vh]"
-            />
-            <p className="mt-1 whitespace-nowrap text-center font-body text-[7px] uppercase tracking-[0.18em] text-black">
-              {c.label}
-            </p>
-            <svg
-              aria-hidden="true"
-              width="40"
-              height="1"
-              shapeRendering="crispEdges"
-              className="absolute left-[calc(100%-13px)] top-1/2 -mt-[0.5px] hidden shrink-0 md:block"
-            >
-              <line x1="0" y1="0.5" x2="40" y2="0.5" stroke="#000" strokeWidth="1" />
-            </svg>
-          </div>
-        </div>
-      ))}
-    </>
-  )
-}
-
 export const HomePage = () => {
   const navigate = useNavigate()
   useLenis()
   const reduced = useReducedMotion()
   const [lang] = useState<'en' | 'ar'>('en')
-  const heroRef = useRef<HTMLDivElement>(null)
-  const frameRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
-  const scene1IllusRef = useRef<HTMLDivElement>(null)
-  const scene2Ref = useRef<HTMLDivElement>(null)
-  const scene2Done = useRef(false)
-  const motifTimer = useRef<number | null>(null)
-  const [motifsVisible, setMotifsVisible] = useState(false)
-  const [scene2Active, setScene2Active] = useState(false)
-  const [revealState, setRevealState] = useState<HeroRevealState>(() =>
-    typeof window !== 'undefined' &&
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ? 'completed'
-      : 'notStarted',
-  )
-  const revealRef = useRef<HeroRevealState>(revealState)
-  const lockTimer = useRef<number | null>(null)
-  const mx = useMotionValue(0)
-
-  useLayoutEffect(() => {
-    if (reduced) return
-    const setHidden = () => {
-      if (revealRef.current !== 'notStarted') return
-      // REVERSIBLE (mobile Scene 1 fix): wider reveal travel on narrow frames.
-      const narrow = window.innerWidth < 1024
-      mx.set((narrow ? 0.25 : 0.15) * (frameRef.current?.clientWidth ?? 0))
-    }
-    setHidden()
-    window.addEventListener('resize', setHidden)
-    return () => window.removeEventListener('resize', setHidden)
-  }, [reduced, mx])
-
-  useEffect(() => {
-    revealRef.current = revealState
-  }, [revealState])
-
-  useEffect(() => {
-    if (reduced && revealRef.current === 'notStarted') {
-      revealRef.current = 'completed'
-      setRevealState('completed')
-    }
-  }, [reduced])
-
-  useEffect(() => {
-    if (reduced) return
-
-    const getLenis = () =>
-      (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis
-
-    const lockScroll = () => {
-      document.body.style.overflow = 'hidden'
-      document.documentElement.style.overflow = 'hidden'
-      getLenis()?.stop()
-    }
-
-    const unlockScroll = () => {
-      document.body.style.overflow = ''
-      document.documentElement.style.overflow = ''
-      getLenis()?.start()
-    }
-
-    const heroPinnedInView = () => {
-      const el = heroRef.current
-      if (!el) return false
-      const rect = el.getBoundingClientRect()
-      return rect.top <= 8 && rect.bottom > window.innerHeight * 0.4
-    }
-
-    const heroScrolledPast = () => {
-      const el = heroRef.current
-      if (!el) return false
-      return el.getBoundingClientRect().bottom < window.innerHeight * 0.5
-    }
-
-    const finish = () => {
-      if (lockTimer.current !== null) {
-        window.clearTimeout(lockTimer.current)
-        lockTimer.current = null
-      }
-      if (revealRef.current === 'notStarted') mx.set(0)
-      revealRef.current = 'completed'
-      setRevealState('completed')
-      unlockScroll()
-    }
-
-    const start = () => {
-      if (revealRef.current !== 'notStarted') return
-      revealRef.current = 'inProgress'
-      setRevealState('inProgress')
-      animate(mx, 0, { duration: 0.8, ease: [0.16, 1, 0.3, 1] })
-      lockScroll()
-      if (lockTimer.current !== null) window.clearTimeout(lockTimer.current)
-      lockTimer.current = window.setTimeout(finish, REVEAL_LOCK_MS)
-    }
-
-    const onWheel = (e: WheelEvent) => {
-      if (revealRef.current === 'inProgress') {
-        e.preventDefault()
-        return
-      }
-      if (revealRef.current !== 'notStarted') return
-      if (e.deltaY <= 0) return
-      if (heroScrolledPast()) {
-        finish()
-        return
-      }
-      if (!heroPinnedInView()) return
-      e.preventDefault()
-      start()
-    }
-
-    let lastTouchY: number | null = null
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches.length > 0) lastTouchY = e.touches[0].clientY
-    }
-
-    const onTouchMove = (e: TouchEvent) => {
-      if (revealRef.current === 'inProgress') {
-        e.preventDefault()
-        return
-      }
-      if (revealRef.current !== 'notStarted' || lastTouchY === null) return
-      const currentY = e.touches.length > 0 ? e.touches[0].clientY : lastTouchY
-      const swipedUp = lastTouchY - currentY
-      lastTouchY = currentY
-      if (swipedUp <= 8) return
-      if (heroScrolledPast()) {
-        finish()
-        return
-      }
-      if (!heroPinnedInView()) return
-      e.preventDefault()
-      start()
-    }
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (
-        e.key !== 'ArrowDown' &&
-        e.key !== 'PageDown' &&
-        e.key !== ' ' &&
-        e.key !== 'End'
-      ) {
-        return
-      }
-      if (revealRef.current === 'inProgress') {
-        e.preventDefault()
-        return
-      }
-      if (revealRef.current !== 'notStarted') return
-      if (heroScrolledPast()) {
-        finish()
-        return
-      }
-      if (!heroPinnedInView()) return
-      e.preventDefault()
-      start()
-    }
-
-    const onScroll = () => {
-      if (revealRef.current !== 'notStarted') return
-      if (window.scrollY <= 4) return
-      if (heroScrolledPast()) {
-        finish()
-        return
-      }
-      start()
-    }
-
-    window.addEventListener('wheel', onWheel, { passive: false, capture: true })
-    window.addEventListener('touchstart', onTouchStart, { passive: true })
-    window.addEventListener('touchmove', onTouchMove, { passive: false, capture: true })
-    window.addEventListener('keydown', onKeyDown, { capture: true })
-    window.addEventListener('scroll', onScroll, { passive: true })
-
-    return () => {
-      if (lockTimer.current !== null) {
-        window.clearTimeout(lockTimer.current)
-        lockTimer.current = null
-      }
-      mx.stop()
-      unlockScroll()
-      window.removeEventListener('wheel', onWheel, { capture: true })
-      window.removeEventListener('touchstart', onTouchStart)
-      window.removeEventListener('touchmove', onTouchMove, { capture: true })
-      window.removeEventListener('keydown', onKeyDown, { capture: true })
-      window.removeEventListener('scroll', onScroll)
-    }
-  }, [reduced, mx])
-
-  // Scene 1 illustration ⇄ Scene 2: pinned, scroll-driven, translateX-only.
-  // ONLY the right-side illustration group moves (Scene 1 wall/character/hand
-  // 0 → +100vw out right; Scene 2 +100vw → 0 in from right). Static hero
-  // content (logo, text, buttons) is never transformed. One-way latch.
-  useEffect(() => {
-    if (reduced) return
-    const track = trackRef.current
-    const s1 = scene1IllusRef.current
-    const s2 = scene2Ref.current
-    if (!track || !s1 || !s2) return
-
-    let raf = 0
-    let current = 0
-
-    const scheduleMotifs = () => {
-      if (motifTimer.current !== null) return
-      motifTimer.current = window.setTimeout(() => setMotifsVisible(true), MOTIF_FADE_DELAY_MS)
-    }
-
-    const apply = (p: number) => {
-      // translateX only — final sizes established in CSS (Scene2 img h-full w-auto).
-      // Offset is px-based: on narrow screens the fitted closeup is wider than
-      // the viewport, so 100vw would leave it peeking into view.
-      const vw = window.innerWidth
-      const imgW = s2.querySelector('img')?.clientWidth ?? 0
-      const off = Math.max(vw, imgW)
-      s1.style.transform = `translate3d(${(p * off).toFixed(1)}px, 0, 0)`
-      s2.style.transform = `translate3d(${((1 - p) * off).toFixed(1)}px, 0, 0)`
-    }
-
-    const measure = () => {
-      const rect = track.getBoundingClientRect()
-      const total = track.offsetHeight - window.innerHeight
-      // Hold zone: extra pinned distance after the animation completes so the
-      // finished Scene 2 stays stationary ~1s before the sticky releases.
-      // Progress maps 0→1 over the animation distance only; the hold zone
-      // keeps progress at 1 while still pinned. Release is pure geometry.
-      const hold = window.innerHeight * 0.6
-      const anim = Math.max(1, total - hold)
-      if (total <= 0) return scene2Done.current ? 1 : 0
-      if (scene2Done.current) return 1
-      const p = Math.min(1, Math.max(0, -rect.top / anim))
-      if (p >= 0.999) {
-        scene2Done.current = true
-        scheduleMotifs()
-        setScene2Active(true)
-        return 1
-      }
-      return p
-    }
-
-    const update = () => {
-      raf = 0
-      const target = measure()
-      // Subtle interpolation for smoothness; snap when close. Still scroll-driven.
-      current += (target - current) * 0.22
-      if (Math.abs(target - current) < 0.001) current = target
-      apply(current)
-      if (current !== target && !scene2Done.current) {
-        raf = requestAnimationFrame(update)
-      }
-    }
-
-    const requestUpdate = () => {
-      if (!raf) raf = requestAnimationFrame(update)
-    }
-
-    apply(0)
-    requestUpdate()
-
-    // Recompute offsets once artwork dimensions are known.
-    const s2img = s2.querySelector('img')
-    s2img?.addEventListener('load', requestUpdate)
-
-    window.addEventListener('scroll', requestUpdate, { passive: true })
-    window.addEventListener('resize', requestUpdate)
-    return () => {
-      if (raf) cancelAnimationFrame(raf)
-      s2img?.removeEventListener('load', requestUpdate)
-      if (motifTimer.current !== null) {
-        window.clearTimeout(motifTimer.current)
-        motifTimer.current = null
-      }
-      window.removeEventListener('scroll', requestUpdate)
-      window.removeEventListener('resize', requestUpdate)
-    }
-  }, [reduced])
-
-  const completeReveal = () => {
-    if (revealRef.current === 'completed') return
-    if (lockTimer.current !== null) {
-      window.clearTimeout(lockTimer.current)
-      lockTimer.current = null
-    }
-    mx.set(0)
-    revealRef.current = 'completed'
-    setRevealState('completed')
-    document.body.style.overflow = ''
-    document.documentElement.style.overflow = ''
-    ;(window as unknown as { __lenis?: { start: () => void } }).__lenis?.start()
-  }
-
-  const revealed = revealState !== 'notStarted'
 
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
@@ -384,30 +26,22 @@ export const HomePage = () => {
       {/* Background Ambient Gradient */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#A50100] via-black to-black" />
 
-      {/* HERO — Scene 1 → Scene 2 scroll sequence (pinned, translateX-only) */}
-      <div ref={trackRef} className="relative bg-[#EDEBDE]" style={reduced ? undefined : { height: '220vh' }}>
+      {/* HERO — static Scene 1 composition; no scroll-driven motion */}
       <section
-        ref={heroRef}
         id="hero-sequence"
-        className={reduced
-          ? "relative min-h-screen pb-16 flex items-center justify-center overflow-hidden z-10 bg-[#EDEBDE] text-black"
-          : "sticky top-0 h-screen max-lg:h-[100dvh] overflow-hidden z-10 bg-[#EDEBDE] text-black"}
+        className="relative min-h-screen max-lg:min-h-[100dvh] overflow-hidden z-10 bg-[#EDEBDE] text-black"
       >
         <div
-          className={reduced ? "w-full" : "absolute inset-0 flex items-center justify-center max-lg:justify-start pb-16 max-lg:pb-8 max-lg:pt-16"}
+          className="absolute inset-0 flex items-center justify-center max-lg:justify-start pb-16 max-lg:pb-8 max-lg:pt-16"
         >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-12 gap-12 max-lg:gap-6 lg:gap-8 items-stretch">
             
-            {/* Left Copy — stationary cell, content crossfades Scene 1 ⇄ Scene 2.
-                Cell is positioned on desktop so the overlay fills it exactly;
-                on mobile the overlay anchors to the viewport instead. */}
+            {/* Left Copy */}
             <div
-              className={`lg:col-span-6 lg:relative self-center ${scene2Active ? 'pointer-events-none' : ''}`}
+              className="lg:col-span-6 lg:relative self-center"
             >
             <div
-              aria-hidden={scene2Active}
-              className={`transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-0' : 'opacity-100'}`}
             >
             <motion.div 
               initial={{ opacity: 0, y: 30 }} 
@@ -448,66 +82,21 @@ export const HomePage = () => {
                   aria-hidden="true"
                   className="h-auto w-[143%] max-w-none -ml-[9%] -mr-[34%] object-contain py-[5px]"
                 />
-                <a href="#philosophy" onClick={completeReveal} className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
+                <a href="#philosophy" className="text-[11px] tracking-[0.25em] uppercase text-black/50 hover:text-black transition-colors">
                 {t('SCROLL TO DISCOVER ↓', 'مرري للاكتشاف ↓')}
               </a>
                </div>
-             </motion.div>
-             </div>
-             {/* Scene 2 Copy — same cell, fades in as one block when active.
-                 On mobile the closeup is full-bleed, so the copy sits in a
-                 cream sheet pinned to the bottom; on desktop it stays in place. */}
-             <div
-               aria-hidden={!scene2Active}
-               className={`absolute inset-0 z-40 lg:z-auto flex flex-col items-center justify-end text-center lg:justify-center lg:items-start lg:text-start transition-opacity duration-500 ease-out ${scene2Active ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-             >
-               <div className="flex w-full flex-col items-center bg-[#EDEBDE] px-6 pb-8 pt-6 lg:w-auto lg:items-start lg:bg-transparent lg:p-0">
-               <h2 className="text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-black">
-                 Your culture is part<br />of your beauty.
-               </h2>
-              <p className="mt-6 max-lg:mt-4 text-base sm:text-lg max-lg:text-sm text-black/70 max-w-xl font-light leading-relaxed">
-                 Beauty doesn’t have to look the same everywhere. Discover styles, colors, beauty practices, and traditions that connect with where you come from and who you are.
-               </p>
-               <div className="mt-8 flex flex-wrap justify-center lg:justify-start gap-3">
-                 {['CULTURE', 'TRADITION', 'STYLE', 'IDENTITY'].map((pill) => (
-                   <span
-                     key={pill}
-                     className="rounded-full border border-[#A50100] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-[#A50100]"
-                   >
-                     {pill}
-                   </span>
-                 ))}
-               </div>
-               <p className="mt-8 text-[11px] uppercase tracking-[0.22em] text-black/50">
-                 SAUDI · PALESTINIAN · KHALEEJI · MUSLIM ·
-               </p>
-               </div>
-             </div>
-             </div>
+              </motion.div>
+              </div>
+              </div>
 
-            {/* REVERSIBLE mobile Scene 1 fix: mobile-only overrides so the girl
-                reveals correctly on narrow frames and the hero fits small
-                viewports. Touchpoints: (1) max-lg:h-[100dvh] on the sticky
-                section above, (2) max-lg wrapper anchoring/spacing above,
-                (3) max-lg:mt-6 CTA + max-lg:mt-8 scroll cue + max-lg text and
-                button sizes + max-lg:gap-6 grid above, (4) frame height +
-                character offset below, (5) reveal factor in the setHidden
-                effect (0.25 under 1024px), (6) px-based slide offsets in
-                apply() + 200vw initial fallback + s2 img load listener,
-                (7) wall/hand max-lg:right-[8px] for slight overlap of the
-                mobile girl and wall painted edges.
-                To reverse, delete each max-lg: class listed here and restore
-                0.15 in setHidden, vw offsets in apply(), and 100vw fallback. */}
-            {/* Right illustration column — the ONLY Scene 1 element that scroll-translates.
-                lg:absolute keeps the frame geometry identical to the previous full-hero
-                offset box while the grid cell stays in flow on mobile. */}
+            {/* Right illustration column */}
             {/* full.svg ground truth: character shifted +(173.58,-11.09); wall matrix(1.6816,+980.46,-7.62); hand crop +(159.49,-21.40) */}
-            <div ref={scene1IllusRef} className="lg:col-span-6 min-h-[480px] max-lg:min-h-0 lg:absolute lg:inset-0 will-change-transform">
-               <div ref={frameRef} className="relative h-[70vh] max-lg:h-[42vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
-                  {/* Character layer: stays behind the wall */}
-                  <motion.div
+            <div className="lg:col-span-6 min-h-[480px] max-lg:min-h-0">
+               <div className="relative h-[70vh] max-lg:h-[42vh] w-full overflow-hidden lg:absolute lg:inset-y-0 lg:right-[-4%] lg:h-auto lg:w-[44vw]">
+                  {/* Character layer: behind the wall */}
+                  <div
                     className="absolute inset-0"
-                    style={{ x: mx, willChange: 'transform' }}
                   >
                     {/* Character: full.svg-mapped height so the abaya touches the frame bottom */}
                     <img
@@ -515,7 +104,7 @@ export const HomePage = () => {
                       alt="Woman in black abaya with red embroidered trim peeking from behind a wall"
                       className="absolute bottom-[-3%] left-[10%] max-lg:left-[26%] z-10 h-[105%] w-auto max-w-none object-contain"
                     />
-                  </motion.div>
+                  </div>
                   {/* Wall: static, utmost right, full height */}
                   <img 
                     src="/brand/hero/hero-wall.svg" 
@@ -526,14 +115,10 @@ export const HomePage = () => {
                   {/* Positioning shim with wall-identical geometry; hand % stays aligned on every viewport */}
                   <div className="absolute right-0 max-lg:right-[8px] top-[-25%] h-[150%] aspect-[648/2014.462] pointer-events-none">
                     {/* Hand: full.svg-mapped size/position, fingertips over the wall edge */}
-                    <motion.img
+                    <img
                       src="/brand/hero/hero-hand.svg"
                       alt=""
                       aria-hidden="true"
-                      style={{ x: mx }}
-                      initial={reduced ? false : { opacity: 0 }}
-                      animate={{ opacity: reduced || revealed ? 1 : 0 }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                       className="absolute left-[-14.7%] top-[66.1%] z-30 h-[32.9%] w-auto max-w-none object-contain pointer-events-none"
                     />
                   </div>
@@ -543,34 +128,7 @@ export const HomePage = () => {
           </div>
         </div>
         </div>
-        {!reduced && (
-          <div
-            ref={scene2Ref}
-            aria-hidden={false}
-            className="absolute inset-0 z-30 flex items-stretch justify-end will-change-transform pointer-events-none"
-            style={{ transform: 'translate3d(200vw, 0, 0)' }}
-          >
-            <img
-              src="/brand/scene2/torso-closeup.svg"
-              alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
-              draggable={false}
-              className="block h-full w-auto max-w-none object-contain"
-            />
-            <Scene2Callouts visible={motifsVisible} />
-          </div>
-        )}
       </section>
-      {reduced && (
-        <section aria-label="Torso close-up" className="relative h-screen overflow-hidden bg-[#EDEBDE] flex items-stretch justify-end">
-          <img
-            src="/brand/scene2/torso-closeup.svg"
-            alt="Close-up illustration of the woman's torso with red embroidered abaya trim"
-            className="block h-full w-auto max-w-none object-contain"
-          />
-          <Scene2Callouts visible />
-        </section>
-      )}
-      </div>
 
       {/* PHILOSOPHY SECTION — Quiet Luxury & Restraint */}
       <section id="philosophy" className="py-24 bg-black/30 border-y border-white/10 relative overflow-hidden">
