@@ -66,8 +66,17 @@ export function useSceneSnap(
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     let settleTimer: ReturnType<typeof setTimeout>;
 
-    const getSnapPoints = () =>
-      scenesRef.current.map((el) => el.offsetTop);
+    const getSnapPoints = () => {
+      const points = scenesRef.current.map((el) => el.offsetTop);
+      // Without this, anything scrolled past the last marked scene has
+      // nowhere to settle but backward into that scene — it gets pulled
+      // back up no matter how far down the user scrolls. Adding the true
+      // page bottom gives unmarked trailing content (CTA, footer) a
+      // legitimate resting point of its own.
+      const bottom = document.documentElement.scrollHeight - window.innerHeight;
+      if (!points.includes(bottom)) points.push(bottom);
+      return points;
+    };
 
     const trigger = ScrollTrigger.create({
       trigger: document.documentElement,
@@ -82,6 +91,10 @@ export function useSceneSnap(
         if (velocity > velocityThreshold) return; // still moving, let it ride
 
         settleTimer = setTimeout(() => {
+          // Re-measure first: images/fonts loading after mount grow the page,
+          // leaving Lenis's construction-time limit stale and clamping
+          // scrollTo short of the true bottom.
+          lenis.resize();
           const current = lenis.scroll;
           const snapPoints = getSnapPoints();
           const nearest = snapPoints.reduce((closest, point) =>
