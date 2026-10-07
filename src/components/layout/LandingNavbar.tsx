@@ -10,25 +10,27 @@ const LINKS = [
 
 function BrandLockup() {
   return (
-    // Scaled as one group so logo, wordmark, and subtext keep their proportions
-    <div style={{ zoom: 0.52 }}>
-      <div className="flex items-center gap-2.5">
+    // Explicit compact sizing (same proportions as the hero lockup at ~0.52
+    // scale). No zoom: it breaks the percentage coupling between the
+    // wordmark image and the subtext that anchors the column width.
+    <div>
+      <div className="flex items-center gap-[5px]">
         <img
           src="/brand/logo/logolightmode.svg"
           alt="deheiyya star mark"
-          className="h-[46px] w-[46px] object-contain shrink-0"
+          className="h-[24px] w-[24px] object-contain shrink-0"
         />
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center w-[148px]">
           <img
             src="/brand/wordmark/wordmarkblack.svg"
             alt="deheiyya"
-            className="h-auto w-[171.3%] max-w-none -ml-[35.3%] -mr-[36%] object-contain shrink-0"
+            className="h-auto w-[254px] max-w-none -ml-[52px] object-contain shrink-0"
           />
-          <div className="-mt-[18px] flex w-fit items-center justify-between gap-[0.35em] text-[13px] tracking-[0.07em] text-black/60">
+          <div className="-mt-[9px] flex w-full items-center justify-between gap-[0.35em] text-[7px] tracking-[0.07em] text-black/60">
             <span className="whitespace-nowrap">CULTURE</span>
-            <span className="text-[10px] text-[#A50100]">✦</span>
+            <span className="text-[5px] text-[#A50100]">✦</span>
             <span className="whitespace-nowrap">SELF-EXPRESSION</span>
-            <span className="text-[10px] text-[#A50100]">✦</span>
+            <span className="text-[5px] text-[#A50100]">✦</span>
             <span className="whitespace-nowrap">YOU</span>
           </div>
         </div>
