@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Compass, Layers, BookOpen, Crown, Check } from 'lucide-react'
 import { useLenis } from '../hooks/useLenis'
+import { useSceneSnap } from '../hooks/useSceneSnap'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { LandingNavbar } from '../components/layout/LandingNavbar'
 import { cn } from '../lib/utils'
 
 export const HomePage = () => {
   const navigate = useNavigate()
-  useLenis()
+  const lenis = useLenis()
+  useSceneSnap(lenis)
   const reduced = useReducedMotion()
   const [lang] = useState<'en' | 'ar'>('en')
 
@@ -29,6 +31,7 @@ export const HomePage = () => {
       {/* HERO — static Scene 1 composition; no scroll-driven motion */}
       <section
         id="hero-sequence"
+        data-scene
         className="relative min-h-screen max-lg:min-h-[100dvh] overflow-hidden z-10 bg-[#EDEBDE] text-black"
       >
         <div
@@ -131,7 +134,7 @@ export const HomePage = () => {
       </section>
 
       {/* SCENE 2 — full-bleed background image directly below the hero */}
-      <section id="philosophy" aria-label="Scene 2" className="relative h-screen w-full overflow-hidden bg-black">
+      <section id="philosophy" data-scene aria-label="Scene 2" className="relative h-screen w-full overflow-hidden bg-black">
         <img
           src="/brand/scenes/scene2-bg.jpg"
           alt="Woman surrounded by notes of beauty standards she rejects"
@@ -141,7 +144,7 @@ export const HomePage = () => {
       </section>
 
       {/* HOW IT WORKS — 4-Step Discovery Path */}
-      <section id="discover" className="py-24 bg-black relative">
+      <section id="discover" data-scene className="py-24 bg-black relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="text-center mb-16">
@@ -201,7 +204,7 @@ export const HomePage = () => {
       </section>
 
       {/* BENTO GRID — Real Product & Avatar Showcase */}
-      <section id="library" className="py-24 bg-black border-t border-white/10">
+      <section id="library" data-scene className="py-24 bg-black border-t border-white/10">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
@@ -324,7 +327,7 @@ export const HomePage = () => {
       </section>
 
       {/* PRICING & EXPERIENCE TIERS — BEGIN / DEFINE / CREATE */}
-      <section id="pricing" className="py-24 bg-black relative">
+      <section id="pricing" data-scene className="py-24 bg-black relative">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
