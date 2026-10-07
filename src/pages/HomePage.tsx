@@ -130,46 +130,14 @@ export const HomePage = () => {
         </div>
       </section>
 
-      {/* PHILOSOPHY SECTION — Quiet Luxury & Restraint */}
-      <section id="philosophy" className="py-24 bg-black/30 border-y border-white/10 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] tracking-[0.25em] text-[#EDEBDE]/70 uppercase mb-8">
-            <img src="/brand/seals/sealblack.svg" alt="Seal" className="w-4 h-4 object-contain" />
-            <span>{t('BRAND PHILOSOPHY', 'فلسفة كشختي')}</span>
-          </div>
-
-          <h2 className="text-3xl sm:text-5xl font-display font-light text-[#EDEBDE] leading-tight">
-            {t('Beauty emerges from knowledge,', 'الجمال ينبع من المعرفة،')}<br />
-            <span className="italic font-normal text-[#A50100]">
-              {t('not standard trends.', 'وليس من الصيحات العابرة.')}
-            </span>
-          </h2>
-
-          <p className="mt-6 text-base sm:text-lg text-[#EDEBDE]/70 max-w-2xl mx-auto font-light leading-relaxed">
-            {t(
-              'deheiyya maps the intricate interplay between your facial features, skin undertones, lifestyle, modesty preferences, and heritage. A quiet luxury library created around who you truly are.',
-              'كشختي ترسم التناغم الدقيق بين ملامح وجهكِ، درجات بشرتكِ، نمط حياتكِ، وأصالة هويتكِ. مكتبة فخمة ومصممة بعناية حول جوهركِ الحقيقي.'
-            )}
-          </p>
-
-          {/* 5 Pillars of deheiyya */}
-          <div className="mt-14 grid grid-cols-2 sm:grid-cols-5 gap-4 text-center">
-            {[
-              { title: 'ELEGANT', sub: 'Luxury through restraint' },
-              { title: 'INTELLIGENT', sub: 'Beauty backed by knowledge' },
-              { title: 'TIMELESS', sub: 'Classic over trends' },
-              { title: 'PERSONAL', sub: 'Tailored to you' },
-              { title: 'REFINED', sub: 'Feminine & sophisticated' },
-            ].map((p) => (
-              <div key={p.title} className="p-4 rounded-2xl bg-black/60 border border-white/10 backdrop-blur-md">
-                <div className="text-xs font-bold tracking-widest text-[#EDEBDE]">{p.title}</div>
-                <div className="text-[10px] text-[#EDEBDE]/50 mt-1 font-light">{p.sub}</div>
-              </div>
-            ))}
-          </div>
-
-        </div>
+      {/* SCENE 2 — full-bleed background image directly below the hero */}
+      <section id="philosophy" aria-label="Scene 2" className="relative h-screen w-full overflow-hidden bg-black">
+        <img
+          src="/brand/scenes/scene2-bg.jpg"
+          alt="Woman surrounded by notes of beauty standards she rejects"
+          draggable={false}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       </section>
 
       {/* HOW IT WORKS — 4-Step Discovery Path */}
