@@ -38,15 +38,22 @@ interface UseSceneSnapOptions {
    *  snap fires, in ms. Lower = snappier but more likely to interrupt
    *  someone reading mid-scene; higher = calmer but slower to commit. */
   settleDelay?: number;
+  /** How close the user must already be to a scene's resting point,
+   *  as a fraction of viewport height, before snapping engages. Below
+   *  this distance it reads as "nudging into place"; above it, nothing
+   *  happens — someone resting in the middle of a tall section is left
+   *  alone instead of being pulled all the way to its edge. */
+  snapThreshold?: number;
 }
 
 export function useSceneSnap(
   lenis: Lenis | null,
   {
     sceneSelector = "[data-scene]",
-    duration = 0.65,
+    duration = 0.5,
     velocityThreshold = 2.5,
     settleDelay = 90,
+    snapThreshold = 0.25,
   }: UseSceneSnapOptions = {}
 ) {
   const scenesRef = useRef<HTMLElement[]>([]);
@@ -100,13 +107,19 @@ export function useSceneSnap(
           const nearest = snapPoints.reduce((closest, point) =>
             Math.abs(point - current) < Math.abs(closest - current) ? point : closest
           );
+          const distance = Math.abs(nearest - current);
 
           // Already settled close enough — don't fight tiny residual motion.
-          if (Math.abs(nearest - current) < 4) return;
+          if (distance < 4) return;
+
+          // Too far from any scene to be "resting on" one — someone stopped
+          // partway down a tall section, mid-read. Leave them where they are
+          // instead of pulling them to an edge they weren't heading toward.
+          if (distance > window.innerHeight * snapThreshold) return;
 
           lenis.scrollTo(nearest, {
             duration,
-            easing: (t: number) => 1 - Math.pow(1 - t, 3), // quick ease-out
+            easing: (t: number) => 1 - Math.pow(1 - t, 2), // gentler ease-out than before
           });
         }, settleDelay);
       },
@@ -117,5 +130,5 @@ export function useSceneSnap(
       trigger.kill();
       lenis.off("scroll", ScrollTrigger.update);
     };
-  }, [lenis, sceneSelector, duration, velocityThreshold, settleDelay]);
+  }, [lenis, sceneSelector, duration, velocityThreshold, settleDelay, snapThreshold]);
 }
