@@ -141,7 +141,7 @@ export const HomePage = () => {
           draggable={false}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-center px-6 lg:px-8">
+        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-center pr-6 lg:pr-8 pl-[clamp(1.5rem,4vw,4rem)]">
           <h2 className="max-w-2xl text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-[#EDEBDE]">
             We’ve been given<br />
             <span className="italic font-normal text-[#A50100]">a thousand rules</span><br />
@@ -151,7 +151,7 @@ export const HomePage = () => {
             Trends, traditions, aesthetics, we’re constantly told what to wear, how to look, who to be and what to buy.
           </p>
         </div>
-        <p className="absolute inset-x-0 bottom-10 z-10 px-6 text-center text-2xl sm:text-4xl font-display font-light tracking-tight leading-[1.15] text-[#EDEBDE]">
+        <p className="absolute inset-x-0 bottom-[8vh] z-10 px-6 text-center text-2xl sm:text-4xl font-display font-light tracking-tight leading-[1.15] text-[#EDEBDE]">
           But what if none of them<br />
           <span className="italic font-normal text-[#A50100]">were made for you?</span>
         </p>
