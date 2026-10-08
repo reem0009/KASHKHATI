@@ -141,7 +141,7 @@ export const HomePage = () => {
           draggable={false}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col justify-center pr-6 lg:pr-8 pl-[clamp(1.5rem,4vw,4rem)]">
+        <div className="relative z-10 flex h-full w-full flex-col justify-center pr-6 lg:pr-8 pl-[clamp(1.5rem,4vw,4rem)]">
           <h2 className="max-w-2xl text-4xl sm:text-6xl font-display font-light tracking-tight leading-[1.08] text-[#EDEBDE]">
             We’ve been given<br />
             <span className="italic font-normal text-[#A50100]">a thousand rules</span><br />
