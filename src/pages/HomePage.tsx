@@ -152,8 +152,8 @@ export const HomePage = () => {
             <span className="italic font-normal text-[#A50100]">a thousand rules</span><br />
             for how to be beautiful.
           </h2>
-          <p className="mt-5 max-w-xl text-base sm:text-[clamp(0.9375rem,0.95vw,1rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[2vw] lg:max-w-[25vw] lg:text-center lg:text-[1.29vw] lg:leading-[1.47]">
-            Trends, traditions, aesthetics, we’re constantly told what to wear, how to look, who to be and what to buy.
+          <p className="mt-5 max-w-xl text-base sm:text-[clamp(0.9375rem,0.95vw,1rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[2vw] lg:max-w-[32vw] lg:text-center lg:text-[1.05vw] lg:leading-[1.5] text-balance">
+            Trends, traditions, aesthetics, we're constantly told what to wear, how to look, who to be and what to buy.
           </p>
         </div>
         <div className="absolute inset-x-0 bottom-[8vh] z-10 px-6 text-center lg:bottom-auto lg:top-[65vh]">
