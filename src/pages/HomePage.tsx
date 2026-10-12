@@ -163,11 +163,11 @@ export const HomePage = () => {
           </p>
 
           {/* Mobile only: absorbs slack so the closing question stays near the bottom
-              on tall/narrow screens. Desktop keeps the fixed 56.3px gap instead. */}
+              on tall/narrow screens. Desktop uses the gap below instead. */}
           <div className="min-h-0 flex-1 lg:hidden" aria-hidden="true" />
 
           {/* Group C — closing question + red divider */}
-          <div className="mt-[clamp(40px,5.5vh,64px)] w-full text-center">
+          <div className="mt-[clamp(40px,9.5vh,112px)] w-full text-center">
             <p className="text-2xl sm:text-[clamp(2.6rem,2.25vw,2.7rem)] font-display font-light tracking-tight leading-[1.12] text-[#EDEBDE] lg:text-[min(3.25vw,6.2vh)] lg:leading-[1.08] lg:tracking-normal">
               But what if none of them<br />
               <span className="italic font-normal text-[#A50100]">were made for you?</span>
