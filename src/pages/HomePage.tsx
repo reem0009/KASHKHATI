@@ -153,12 +153,12 @@ export const HomePage = () => {
           </div>
 
           {/* Group B — headline + supporting paragraph */}
-          <h2 className="max-w-2xl text-4xl sm:text-[clamp(2.75rem,2.7vw,3.25rem)] font-display font-light tracking-tight leading-[1.05] text-[#EDEBDE] lg:max-w-none lg:text-center lg:text-[min(3.9vw,7.5vh)] lg:leading-[1.08] lg:tracking-normal">
+          <h2 className="max-w-2xl text-center text-4xl sm:text-[clamp(2.75rem,2.7vw,3.25rem)] font-display font-light tracking-tight leading-[1.05] text-[#EDEBDE] lg:max-w-none lg:text-[min(3.9vw,7.5vh)] lg:leading-[1.08] lg:tracking-normal">
             We’ve been given<br />
             <span className="italic font-normal text-[#A50100]">a thousand rules</span><br />
             for how to be beautiful.
           </h2>
-          <p className="mt-6 max-w-xl text-base sm:text-[clamp(0.9375rem,1.15vw,1.05rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[1.7vw] lg:max-w-[34rem] lg:text-center lg:text-balance">
+          <p className="mt-6 max-w-xl text-center text-base sm:text-[clamp(0.9375rem,1.15vw,1.05rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[1.7vw] lg:max-w-[34rem] lg:text-balance">
             Trends, traditions, aesthetics, we're constantly told what to wear, how to look, who to be and what to buy.
           </p>
 
@@ -167,7 +167,7 @@ export const HomePage = () => {
           <div className="min-h-0 flex-1 lg:hidden" aria-hidden="true" />
 
           {/* Group C — closing question + red divider */}
-          <div className="mt-[clamp(40px,9.5vh,112px)] w-full text-center">
+          <div className="mt-[clamp(40px,12vh,140px)] w-full text-center">
             <p className="text-2xl sm:text-[clamp(2.6rem,2.25vw,2.7rem)] font-display font-light tracking-tight leading-[1.12] text-[#EDEBDE] lg:text-[min(3.25vw,6.2vh)] lg:leading-[1.08] lg:tracking-normal">
               But what if none of them<br />
               <span className="italic font-normal text-[#A50100]">were made for you?</span>
