@@ -141,27 +141,39 @@ export const HomePage = () => {
           draggable={false}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="relative z-10 flex h-full w-full flex-col justify-center pb-[16vh] pr-6 pl-[clamp(1.25rem,3vw,3rem)] lg:justify-start lg:items-center lg:pt-[calc(64px+4vh)] lg:pb-0 lg:px-[6vw]">
-          <div className="mb-[8vw] hidden items-center gap-[0.8vw] lg:flex" aria-hidden="true">
+{/* Single viewport-height flow. Group A = label, Group B = headline + paragraph,
+            Group C = closing question + divider. No absolutely-positioned text offsets. */}
+        <div className="relative z-10 flex h-full w-full flex-col items-center justify-start pl-[clamp(1.25rem,3vw,3rem)] pr-6 pb-[8vh] pt-[calc(65px+4vh)] lg:px-[6vw] lg:pb-0 lg:pt-[calc(65px+5.5vh)]">
+
+          {/* Group A — section label */}
+          <div className="mb-[8vw] hidden items-center gap-[0.8vw] lg:mb-[11.5vh] lg:flex" aria-hidden="true">
             <span className="font-body text-[0.75vw] text-[#A50100]">02</span>
             <span className="h-px w-[4vw] bg-[#A50100]" />
             <span className="font-body text-[0.75vw] uppercase tracking-[0.3em] text-[#EDEBDE]/60">The Problem</span>
           </div>
+
+          {/* Group B — headline + supporting paragraph */}
           <h2 className="max-w-2xl text-4xl sm:text-[clamp(2.75rem,2.7vw,3.25rem)] font-display font-light tracking-tight leading-[1.05] text-[#EDEBDE] lg:max-w-none lg:text-center lg:text-[min(3.9vw,7.5vh)] lg:leading-[1.08] lg:tracking-normal">
             We’ve been given<br />
             <span className="italic font-normal text-[#A50100]">a thousand rules</span><br />
             for how to be beautiful.
           </h2>
-          <p className="mt-5 max-w-xl text-base sm:text-[clamp(0.9375rem,0.95vw,1rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[2vw] lg:max-w-[36vw] lg:text-center lg:text-[1.29vw] lg:leading-[1.47] text-balance">
+          <p className="mt-6 max-w-xl text-base sm:text-[clamp(0.9375rem,1.15vw,1.05rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[1.7vw] lg:max-w-[34rem] lg:text-center lg:text-balance">
             Trends, traditions, aesthetics, we're constantly told what to wear, how to look, who to be and what to buy.
           </p>
-        </div>
-        <div className="absolute inset-x-0 bottom-[8vh] z-10 px-6 text-center lg:bottom-auto lg:top-[65vh]">
-          <p className="text-2xl sm:text-[clamp(2.6rem,2.25vw,2.7rem)] font-display font-light tracking-tight leading-[1.12] text-[#EDEBDE] lg:text-[min(3.6vw,7vh)] lg:leading-[1.08] lg:tracking-normal">
-            But what if none of them<br />
-            <span className="italic font-normal text-[#A50100]">were made for you?</span>
-          </p>
-          <div className="mx-auto mt-[2.2vw] hidden h-px w-[6.5vw] bg-[#A50100] lg:block" aria-hidden="true" />
+
+          {/* Mobile only: absorbs slack so the closing question stays near the bottom
+              on tall/narrow screens. Desktop keeps the fixed 56.3px gap instead. */}
+          <div className="min-h-0 flex-1 lg:hidden" aria-hidden="true" />
+
+          {/* Group C — closing question + red divider */}
+          <div className="mt-[clamp(40px,5.5vh,64px)] w-full text-center">
+            <p className="text-2xl sm:text-[clamp(2.6rem,2.25vw,2.7rem)] font-display font-light tracking-tight leading-[1.12] text-[#EDEBDE] lg:text-[min(3.25vw,6.2vh)] lg:leading-[1.08] lg:tracking-normal">
+              But what if none of them<br />
+              <span className="italic font-normal text-[#A50100]">were made for you?</span>
+            </p>
+            <div className="mx-auto mt-[clamp(24px,1.8vw,32px)] hidden h-px w-[6.5vw] bg-[#A50100] lg:block" aria-hidden="true" />
+          </div>
         </div>
       </section>
 
