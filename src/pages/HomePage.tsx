@@ -153,7 +153,7 @@ export const HomePage = () => {
           </div>
 
           {/* Group B — headline + supporting paragraph */}
-          <h2 className="max-w-2xl text-center text-4xl sm:text-[clamp(2.75rem,2.7vw,3.25rem)] font-display font-light tracking-tight leading-[1.05] text-[#EDEBDE] lg:mt-[2.5vh] lg:max-w-none lg:text-[min(3.9vw,7.5vh)] lg:leading-[1.08] lg:tracking-normal">
+          <h2 className="max-w-2xl text-center text-4xl sm:text-[clamp(2.75rem,2.7vw,3.25rem)] font-display font-light tracking-tight leading-[1.05] text-[#EDEBDE] lg:mt-[4vh] lg:max-w-none lg:text-[min(3.75vw,7.2vh)] lg:leading-[1.08] lg:tracking-normal">
             We’ve been given<br />
             <span className="italic font-normal text-[#A50100]">a thousand rules</span><br />
             for how to be beautiful.
@@ -163,7 +163,7 @@ export const HomePage = () => {
           </p>
 
           {/* Group C — closing question + red divider */}
-          <div className="mt-[clamp(40px,12vh,140px)] lg:mt-[clamp(40px,9.5vh,120px)] w-full text-center">
+          <div className="mt-[clamp(40px,12vh,140px)] lg:mt-[clamp(40px,8.75vh,110px)] w-full text-center">
             <p className="text-2xl sm:text-[clamp(2.6rem,2.25vw,2.7rem)] font-display font-light tracking-tight leading-[1.12] text-[#EDEBDE] lg:text-[min(2.85vw,5.45vh)] lg:leading-[1.08] lg:tracking-normal">
               But what if none of them<br />
               <span className="italic font-normal text-[#A50100]">were made for you?</span>
