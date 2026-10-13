@@ -143,7 +143,7 @@ export const HomePage = () => {
         />
 {/* Single viewport-height flow. Group A = label, Group B = headline + paragraph,
             Group C = closing question + divider. No absolutely-positioned text offsets. */}
-        <div className="relative z-10 flex h-full w-full flex-col items-center justify-start pl-[clamp(1.25rem,3vw,3rem)] pr-6 pb-[8vh] pt-[calc(65px+4vh)] lg:px-[6vw] lg:pb-0 lg:pt-[calc(65px+5.5vh)]">
+        <div className="relative z-10 flex h-full w-full flex-col items-center justify-center pl-[clamp(1.25rem,3vw,3rem)] pr-6 pb-[8vh] pt-[calc(65px+4vh)] lg:justify-start lg:px-[6vw] lg:pb-0 lg:pt-[calc(65px+5.5vh)]">
 
           {/* Group A — section label */}
           <div className="mb-[8vw] hidden items-center gap-[0.8vw] lg:mb-[11.5vh] lg:flex" aria-hidden="true">
@@ -161,10 +161,6 @@ export const HomePage = () => {
           <p className="mt-6 max-w-xl text-center text-base sm:text-[clamp(0.9375rem,1.15vw,1.05rem)] text-[#EDEBDE]/70 font-light leading-[1.5] lg:mt-[1.7vw] lg:max-w-[34rem] lg:text-balance">
             Trends, traditions, aesthetics, we're constantly told what to wear, how to look, who to be and what to buy.
           </p>
-
-          {/* Mobile only: absorbs slack so the closing question stays near the bottom
-              on tall/narrow screens. Desktop uses the gap below instead. */}
-          <div className="min-h-0 flex-1 lg:hidden" aria-hidden="true" />
 
           {/* Group C — closing question + red divider */}
           <div className="mt-[clamp(40px,12vh,140px)] w-full text-center">
